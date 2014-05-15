@@ -1,48 +1,77 @@
-/* Simple LED Blinker program for MSP430 */
+// watchdog.c
+//
+//****************************************************************************************************
+// Author:
+// 	Nipun Gunawardena
+//
+// Credits:
+//	http://hci.rwth-aachen.de/msp430	
+//
+// Requirements:
+// 	Requires msp430-gcc
+//
+// Description:
+//	Blinking light program
+//
+// Notes:
+//	
+//
+//****************************************************************************************************
+
+
+
+
+// Includes ------------------------------------------------------------------------------------------
 #include <msp430g2553.h>
 
-#define LED1 BIT0 			// The red LED on the LaunchPad
-#define LED2 BIT6			// The green LED on the LaunchPad
+
+
+
+// Defines -------------------------------------------------------------------------------------------
+#define LED1 BIT0 			// Red LED on LaunchPad
+#define LED2 BIT6			// Green LED on LaunchPad
 #define LED_OUT P1OUT
 #define LED_DIR P1DIR
 
-void wait(void)          //delay function
-{
-  volatile int i;        //declare i as volatile int
-  for(i=0;i<16000;i++);  //repeat 32000 times
+
+
+
+// Functions -----------------------------------------------------------------------------------------
+void delay(void){
+	volatile int i;        //declare i as volatile int
+	for(i=0;i<16000;i++);  //repeat 32000 times
 }
 
 
-int main(void)
-{
-    /* Init watchdog timer to off */
-    WDTCTL = WDTPW|WDTHOLD;
 
-    /* Init Output ports to GND */
-    LED_OUT  = 0x00;
 
-    /* I/O not module control */
-    P1SEL  = 0x00;
+// Main ----------------------------------------------------------------------------------------------
+int main(void){
+	// Turn off watchdog timer
+	WDTCTL = WDTPW|WDTHOLD;
 
-    /*	Setup the data direction registers
-    	LED1 is on P1.0 
-		LED2 is on P1.6
-    */
-	LED_DIR = (LED1 + LED2);
+	// Set LED output as 0
+	LED_OUT  = 0x00;
 
-    /* No Interrupts on Port Pins */
-    P1IES  = 0x00;
-    P1IE   = 0x00;
+	// Set pin as I/O. What are the other options for each pin?
+	P1SEL  = 0x00;
 
-	/* Turn LED1 on */ 
+	// Set direction
+	LED_DIR = LED1 | LED2;
+
+	// Disable interrupts
+	P1IES  = 0x00;		// Not completely necessary? Sets interrupt transition setting
+	P1IE   = 0x00;		// Turn interrupts off
+
+	//  Turn LED1 on
 	LED_OUT = LED1;
 
-    /* Loop until the universe breaks down or power becomes a scarce resource*/
-    while (1) {
-        /* Toggle the LED ouput pins */
-		LED_OUT ^= (LED1 + LED2);
+	// Loop
+	while (1){
+		//  Toggle the LED ouput pins
+		LED_OUT ^= LED1 | LED2;
 		
-		/* and wait for a bit */
-        wait();
-    }  /* while */
+		// Delay
+		delay();
+	}
 }
