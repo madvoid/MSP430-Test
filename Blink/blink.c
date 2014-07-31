@@ -37,9 +37,9 @@
 
 
 // Functions -----------------------------------------------------------------------------------------
-void delay(void){
-	volatile int i;        //declare i as volatile int
-	for(i=0;i<16000;i++);  //repeat 32000 times
+void delay(unsigned int count){
+	volatile int i;        // Declare i as volatile int
+	for(i=0;i<count;i++);  // Repeat x times
 }
 
 
@@ -60,8 +60,8 @@ int main(void){
 	LED_DIR = LED1 | LED2;
 
 	// Disable interrupts
-	P1IES  = 0x00;		// Not completely necessary? Sets interrupt transition setting
-	P1IE   = 0x00;		// Turn interrupts off
+	//P1IES  = 0x00;		// Apparently not necessary. Sets interrupt transition setting
+	//P1IE   = 0x00;		// Turn interrupts off
 
 	//  Turn LED1 on
 	LED_OUT = LED1;
@@ -69,9 +69,13 @@ int main(void){
 	// Loop
 	while (1){
 		//  Toggle the LED ouput pins
-		LED_OUT ^= LED1 | LED2;
-		
-		// Delay
-		delay();
+		LED_OUT = LED1;
+		delay(64000);
+
+		LED_OUT = LED2;
+		delay(64000);
+
+		LED_OUT = 0;
+		delay(64000);
 	}
 }
