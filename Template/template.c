@@ -1,4 +1,4 @@
-// blink.c
+// template.c
 //
 //****************************************************************************************************
 // Author:
@@ -8,10 +8,10 @@
 //	http://hci.rwth-aachen.de/msp430	
 //
 // Requirements:
-// 	Requires msp430-gcc
+// 	Requires msp430-gcc and MSP430 Launchpad (MSPEXP430G2)
 //
 // Description:
-//	Blinking light program
+//	Blank template for msp430 project
 //
 // Notes:
 //	
@@ -28,8 +28,8 @@
 
 
 // Defines -------------------------------------------------------------------------------------------
-#define LED1 BIT0 			// Red LED on LaunchPad
-#define LED2 BIT6			// Green LED on LaunchPad
+#define LED_RED BIT0 			// Red LED on LaunchPad
+#define LED_GREEN BIT6			// Green LED on LaunchPad
 #define LED_OUT P1OUT
 #define LED_DIR P1DIR
 
@@ -53,29 +53,18 @@ int main(void){
 	// Set LED output as 0
 	LED_OUT  = 0x00;
 
-	// Set pin as I/O. What are the other options for each pin?
+	// Set pin as I/O.
 	P1SEL  = 0x00;
 
 	// Set direction
-	LED_DIR = LED1 | LED2;
+	LED_DIR = LED_RED | LED_GREEN;
 
-	// Disable interrupts
-	//P1IES  = 0x00;		// Apparently not necessary. Sets interrupt transition setting
-	//P1IE   = 0x00;		// Turn interrupts off
-
-	//  Turn LED1 on
-	LED_OUT = LED1;
+	LED_OUT = LED_RED;
 
 	// Loop
 	while (1){
 		//  Toggle the LED ouput pins
-		LED_OUT = LED1;
-		delay(128000);
-
-		LED_OUT = LED2;
-		delay(128000);
-
-		LED_OUT = 0;
-		delay(128000);
-	}
+		delay(16000);
+		LED_OUT ^= LED_RED | LED_GREEN;
+	}	
 }

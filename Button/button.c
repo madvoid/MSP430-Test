@@ -1,4 +1,4 @@
-// blink.c
+// button.c
 //
 //****************************************************************************************************
 // Author:
@@ -11,7 +11,7 @@
 // 	Requires msp430-gcc
 //
 // Description:
-//	Blinking light program
+//	Light blinks when button is pressed - uses interrupts
 //
 // Notes:
 //	
@@ -28,8 +28,8 @@
 
 
 // Defines -------------------------------------------------------------------------------------------
-#define LED1 BIT0 			// Red LED on LaunchPad
-#define LED2 BIT6			// Green LED on LaunchPad
+#define LED_RED BIT0 			// Red LED on LaunchPad
+#define LED_GREEN BIT6			// Green LED on LaunchPad
 #define LED_OUT P1OUT
 #define LED_DIR P1DIR
 
@@ -47,35 +47,30 @@ void delay(unsigned long count){
 
 // Main ----------------------------------------------------------------------------------------------
 int main(void){
-	// Turn off watchdog timer
-	WDTCTL = WDTPW|WDTHOLD;
+	WDTCTL = WDTPW|WDTHOLD;		// Turn off watchdog timer
+	P1DIR = LED_GREEN;		// Set LEDs as outputs
+	P1OUT = 0x08;			// P1.3 configured to pullup
+	P1REN |= 0x08;			// P1.3 enable pullup
+	P1IE |= 0x08;			// P1.3 interrupt enabled
+	P1IES |= 0x08;			// P1.3 Hi/lo edge
+	P1IFG &= ~0x08;			// Clear any existing interrupt
 
-	// Set LED output as 0
-	LED_OUT  = 0x00;
+	__bis_SR_register(LPM4_bits + GIE);
+}
 
-	// Set pin as I/O. What are the other options for each pin?
-	P1SEL  = 0x00;
 
-	// Set direction
-	LED_DIR = LED1 | LED2;
 
-	// Disable interrupts
-	//P1IES  = 0x00;		// Apparently not necessary. Sets interrupt transition setting
-	//P1IE   = 0x00;		// Turn interrupts off
-
-	//  Turn LED1 on
-	LED_OUT = LED1;
-
-	// Loop
-	while (1){
-		//  Toggle the LED ouput pins
-		LED_OUT = LED1;
-		delay(128000);
-
-		LED_OUT = LED2;
-		delay(128000);
-
-		LED_OUT = 0;
-		delay(128000);
-	}
+// Port 1 ISR ----------------------------------------------------------------------------------------
+#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_INC__)
+#pragma vector=PORT1_VECTOR
+__interrupt void Port_1(void)
+#elif defined(__GNUC__)
+void __attribute__ ((interrupt(PORT1_VECTOR))) Port_1(void)
+#else
+#error Compiler not supported!
+#endif
+{
+	P1OUT ^= LED_GREEN;		// Toggle LED	
+	delay(5000);
+	P1IFG &= ~0x08;			// P1.3 IFG cleared
 }
