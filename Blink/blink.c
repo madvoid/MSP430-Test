@@ -29,7 +29,6 @@
 
 // Defines -------------------------------------------------------------------------------------------
 #define LED1 BIT0 			// Red LED on LaunchPad
-#define LED2 BIT6			// Green LED on LaunchPad
 #define LED_OUT P1OUT
 #define LED_DIR P1DIR
 
@@ -53,11 +52,8 @@ int main(void){
 	// Set LED output as 0
 	LED_OUT  = 0x00;
 
-	// Set pin as I/O. What are the other options for each pin?
-	P1SEL  = 0x00;
-
 	// Set direction
-	LED_DIR = LED1 | LED2;
+	LED_DIR = LED1;
 
 	// Disable interrupts
 	//P1IES  = 0x00;		// Apparently not necessary. Sets interrupt transition setting
@@ -70,12 +66,9 @@ int main(void){
 	while (1){
 		//  Toggle the LED ouput pins
 		LED_OUT = LED1;
-		delay(128000);
-
-		LED_OUT = LED2;
-		delay(128000);
+		delay(12800);
 
 		LED_OUT = 0;
-		delay(128000);
+		delay(12800);
 	}
 }

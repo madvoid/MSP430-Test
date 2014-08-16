@@ -48,6 +48,13 @@ void delay(unsigned long count){
 // Main ----------------------------------------------------------------------------------------------
 int main(void){
 	WDTCTL = WDTPW|WDTHOLD;		// Turn off watchdog timer
+
+	// Initialize other ports to reduce power
+	P2DIR = 0xFF;
+	P2OUT = 0x00;
+	P3DIR = 0xFF;
+	P3OUT = 0x00;
+
 	P1DIR = LED_GREEN;		// Set LEDs as outputs
 	P1OUT = 0x08;			// P1.3 configured to pullup
 	P1REN |= 0x08;			// P1.3 enable pullup

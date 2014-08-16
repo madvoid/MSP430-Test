@@ -24,6 +24,11 @@ chown -R root:wheel ez430rf2500.kext
 chmod -R 755 ez430rf2500.kext
 ```
 
+### Alternate Version ###
+1. Follow steps 1-3 from above
+2. Follow the link to the google code page from PentiumPC's post [here](http://forum.43oh.com/topic/1161-launchpad-osx-usb-drivers-cdc-vcp/) and download the installer.
+3. Run installer. Note that if you follow these instructions, you should not do step 4 from above.
+
 ## Compiling & Uploading ##
 All code can be compiled by running ```make``` in the working directory. The makefile has been designed so that all files inside the working directory will be automatically compiled. However, any ```*.c``` files that live in external folders will need to be added to the ```EXTERN_FILES``` line, all separated by spaces. To summarize, the following steps will need to be completed to modify the makefile for other projects:
 
