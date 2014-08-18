@@ -4,7 +4,7 @@
 This repository is a testbed for code that is to be used with Texas Instruments' [MSP430 Launchpad](http://www.ti.com/tool/msp-exp430g2). This project is a work in progress and may be abandoned soon (depending on which direction my research takes me)
 
 ## Installation and Setup##
-Since I develop on a Mac, here's what I did to get everything working properly. Thanks to the [Media Computing Group](http://hci.rwth-aachen.de/msp430) for the excellent tutorial. 
+Since I develop on a Mac, here's what I did to get everything working properly. Thanks to the [Media Computing Group](http://hci.rwth-aachen.de/msp430) for the excellent tutorial. Note that as of August 17th, 2014, these instructions do not work on the FRAM Launchpad with EnergyTrace tech.
 
 1. Install Xcode and Xcode command line tools
 2. Install Macports
@@ -40,3 +40,4 @@ Programs can be uploaded by running ```make upload```. It should not be necessar
 
 # Project Descriptions #
 * **Blink** - Blinks the LEDs on and off
+* **Button** - Press a button to wake from sleep and blink light
