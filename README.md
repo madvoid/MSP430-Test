@@ -43,3 +43,9 @@ CCS projects are compiled and uploaded within CCS, and CCS should handle everyth
 # Project Descriptions #
 * **Blink** - Blinks the LEDs on and off
 * **Button** - Press a button to wake from sleep and blink light
+* **CCS** - Contains projects from CCS. So far, all projects are configured for the MSPFR5969
+	* **Blink** - Blinks light on and off
+	* **LPM4** - Enters LPM4 and toggles LED with button
+	* **SHT21_Hum** - Gathers humidity from SHT21 sensor
+	* **SHT21_Temp** - Gathers temperature from SHT21 sensor
+	* **TimerB_OneShot** - Counts down timer once

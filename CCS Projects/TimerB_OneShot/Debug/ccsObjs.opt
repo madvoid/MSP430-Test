@@ -1,0 +1,1 @@
+"./main_TimerB_OneShot.obj" "../lnk_msp430fr5969.cmd" -l"libc.a" -l"libmath.a" 
