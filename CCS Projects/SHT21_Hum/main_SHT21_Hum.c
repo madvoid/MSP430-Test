@@ -53,7 +53,7 @@ int main(void)
   P1OUT &= ~BIT0;                           // Clear P1.0 output latch
   P1DIR |= BIT0;                            // For LED
   P1SEL1 |= BIT6 | BIT7;                    // I2C pins
-//  PJSEL0 |= BIT4 | BIT5;					// Set J.4 & J.5 to accept crystal input for ACLK
+  PJSEL0 |= BIT4 | BIT5;					// Set J.4 & J.5 to accept crystal input for ACLK
 
   // Disable the GPIO power-on default high-impedance mode to activate
   // previously configured port settings
@@ -121,7 +121,7 @@ int main(void)
   UCB0CTL1 |= UCTXSTT;
 
   // Delay during transfer - How to use LPM for that?
-  while (UCB0CTLW0 & UCTXSTT);            // Ensure stop condition got sent
+  while (UCB0CTLW0 & UCTXSTT);            // Ensure start condition got sent
   __bis_SR_register(LPM0_bits);       // Enter LPM0 w/ interrupts
 //  __delay_cycles(10000);
 

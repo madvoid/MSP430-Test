@@ -1,0 +1,1 @@
+"./main_BMP180_Cals.obj" "../lnk_msp430fr5969.cmd" -l"libc.a" -l"libmath.a" 

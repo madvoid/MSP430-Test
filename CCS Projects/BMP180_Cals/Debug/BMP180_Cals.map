@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker PC v4.3.4                      
 ******************************************************************************
->> Linked Tue Sep 02 14:11:17 2014
+>> Linked Fri Sep 05 00:05:32 2014
 
-OUTPUT FILE NAME:   <SHT21_Hum.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 00004440
+OUTPUT FILE NAME:   <BMP180_Cals.out>
+ENTRY POINT SYMBOL: "_c_int00"  address: 0000445a
 
 
 MEMORY CONFIGURATION
@@ -18,8 +18,8 @@ MEMORY CONFIGURATION
   INFOC                 00001880   00000080  00000000  00000080  RWIX
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
-  RAM                   00001c00   00000800  000000a7  00000759  RWIX
-  FRAM                  00004400   0000bb80  00000094  0000baec  RWIX
+  RAM                   00001c00   00000800  000000b8  00000748  RWIX
+  FRAM                  00004400   0000bb80  000000a9  0000bad7  RWIX
   JTAGSIGNATURE         0000ff80   00000004  00000004  00000000  RWIX  ffff 
   BSLSIGNATURE          0000ff84   00000004  00000004  00000000  RWIX  ffff 
   IPESIGNATURE          0000ff88   00000008  00000008  00000000  RWIX  ffff 
@@ -79,7 +79,7 @@ MEMORY CONFIGURATION
   INT53                 0000fffa   00000002  00000002  00000000  RWIX
   INT54                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FRAM2                 00010000   00004000  0000043e  00003bc2  RWIX
+  FRAM2                 00010000   00004000  000001be  00003e42  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -90,12 +90,11 @@ section   page    origin      length       input sections
 .init_array 
 *          0    00004400    00000000     UNINITIALIZED
 
-.data      0    00001c00    00000004     UNINITIALIZED
-                  00001c00    00000004     main_SHT21_Hum.obj (.data)
+.bss       0    00001c00    00000016     UNINITIALIZED
+                  00001c00    00000016     (.common:g_calBytes)
 
-.bss       0    00001c04    00000003     UNINITIALIZED
-                  00001c04    00000002     (.common:g_rxArr)
-                  00001c06    00000001     (.common:g_rxCount)
+.data      0    00001c16    00000002     UNINITIALIZED
+                  00001c16    00000002     main_BMP180_Cals.obj (.data)
 
 .stack     0    00002360    000000a0     UNINITIALIZED
                   00002360    00000004     rts430x_lc_rd_eabi.lib : boot.obj (.stack)
@@ -109,10 +108,9 @@ section   page    origin      length       input sections
 .sysmem    0    00004400    00000000     UNINITIALIZED
 
 .text:_isr 
-*          0    00004400    00000068     
-                  00004400    00000040     main_SHT21_Hum.obj (.text:_isr:USCI_B0_ISR)
-                  00004440    0000001a     rts430x_lc_rd_eabi.lib : boot.obj (.text:_isr:_c_int00_noexit)
-                  0000445a    0000000e     main_SHT21_Hum.obj (.text:_isr:Timer0_B0_ISR)
+*          0    00004400    00000074     
+                  00004400    0000005a     main_BMP180_Cals.obj (.text:_isr:USCI_B0_ISR)
+                  0000445a    0000001a     rts430x_lc_rd_eabi.lib : boot.obj (.text:_isr:_c_int00_noexit)
 
 .ipestruct 
 *          0    00004400    00000000     UNINITIALIZED
@@ -122,12 +120,14 @@ section   page    origin      length       input sections
 .ipe:_isr 
 *          0    00004400    00000000     UNINITIALIZED
 
-.cinit     0    00004468    0000002c     
-                  00004468    0000000c     (__TI_handler_table)
-                  00004474    00000009     (.cinit..data.load) [load image, compression = rle]
-                  0000447d    00000001     --HOLE-- [fill = 0]
-                  0000447e    00000006     (.cinit..bss.load) [load image, compression = zero_init]
-                  00004484    00000010     (__TI_cinit_table)
+.const     0    00004474    0000000b     
+                  00004474    0000000b     main_BMP180_Cals.obj (.const:.string:g_calRegs)
+
+.cinit     0    00004480    0000002a     
+                  00004480    0000000c     (__TI_handler_table)
+                  0000448c    00000008     (.cinit..data.load) [load image, compression = rle]
+                  00004494    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  0000449a    00000010     (__TI_cinit_table)
 
 $fill000   0    0000ff80    00000004     
                   0000ff80    00000004     --HOLE-- [fill = ffff]
@@ -198,7 +198,7 @@ ADC12      0    0000ffec    00000002
                   0000ffec    00000002     rts430x_lc_rd_eabi.lib : int46.obj (.int46)
 
 USCI_B0    0    0000ffee    00000002     
-                  0000ffee    00000002     main_SHT21_Hum.obj (.int47)
+                  0000ffee    00000002     main_BMP180_Cals.obj (.int47)
 
 USCI_A0    0    0000fff0    00000002     
                   0000fff0    00000002     rts430x_lc_rd_eabi.lib : int48.obj (.int48)
@@ -212,7 +212,7 @@ TIMER0_B1
 
 TIMER0_B0 
 *          0    0000fff6    00000002     
-                  0000fff6    00000002     main_SHT21_Hum.obj (.int51)
+                  0000fff6    00000002     rts430x_lc_rd_eabi.lib : int51.obj (.int51)
 
 COMP_E     0    0000fff8    00000002     
                   0000fff8    00000002     rts430x_lc_rd_eabi.lib : int52.obj (.int52)
@@ -226,32 +226,29 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.obj (.reset)
 
-.text      0    00010000    0000043e     
-                  00010000    00000130     rts430x_lc_rd_eabi.lib : fs_add.obj (.text)
-                  00010130    00000106     main_SHT21_Hum.obj (.text:main)
-                  00010236    000000b6     rts430x_lc_rd_eabi.lib : fs_mpy.obj (.text)
-                  000102ec    0000006e                            : autoinit.obj (.text:_auto_init_hold_wdt)
-                  0001035a    00000062                            : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
-                  000103bc    00000024                            : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
-                  000103e0    00000024                            : fs_utof.obj (.text)
-                  00010404    00000014                            : memcpy.obj (.text:memcpy)
-                  00010418    00000012                            : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
-                  0001042a    00000006                            : isr_trap.obj (.text:__TI_ISR_TRAP)
-                  00010430    00000006                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
-                  00010436    00000004                            : pre_init.obj (.text:_system_pre_init)
-                  0001043a    00000004                            : exit.obj (.text:abort)
+.text      0    00010000    000001be     
+                  00010000    00000090     main_BMP180_Cals.obj (.text:main)
+                  00010090    0000006e     rts430x_lc_rd_eabi.lib : autoinit.obj (.text:_auto_init_hold_wdt)
+                  000100fe    00000062                            : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
+                  00010160    00000024                            : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
+                  00010184    00000014                            : memcpy.obj (.text:memcpy)
+                  00010198    00000012                            : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
+                  000101aa    00000006                            : isr_trap.obj (.text:__TI_ISR_TRAP)
+                  000101b0    00000006                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
+                  000101b6    00000004                            : pre_init.obj (.text:_system_pre_init)
+                  000101ba    00000004                            : exit.obj (.text:abort)
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00004484 records: 2, size/record: 8, table size: 16
-	.data: load addr=00004474, load size=00000009 bytes, run addr=00001c00, run size=00000004 bytes, compression=rle
-	.bss: load addr=0000447e, load size=00000006 bytes, run addr=00001c04, run size=00000003 bytes, compression=zero_init
+__TI_cinit_table @ 0000449a records: 2, size/record: 8, table size: 16
+	.data: load addr=0000448c, load size=00000008 bytes, run addr=00001c16, run size=00000002 bytes, compression=rle
+	.bss: load addr=00004494, load size=00000006 bytes, run addr=00001c00, run size=00000016 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00004468 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 00004480 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_zero_init
 	index: 1, handler: __TI_decompress_rle24
 	index: 2, handler: __TI_decompress_none
@@ -518,7 +515,7 @@ address    name
 000009ce   AESAXIN_L
 000004be   BCD2BIN
 000004bc   BIN2BCD
-0001043a   C$$EXIT
+000101ba   C$$EXIT
 0000043e   CAPTIO0CTL
 0000043f   CAPTIO0CTL_H
 0000043e   CAPTIO0CTL_L
@@ -947,7 +944,6 @@ address    name
 000003e0   TB0EX0
 000003ee   TB0IV
 000003d0   TB0R
-0000445a   Timer0_B0_ISR
 000005d0   UCA0ABCTL
 000005c6   UCA0BRW
 000005c7   UCA0BRW_H
@@ -1063,16 +1059,16 @@ address    name
 0000015c   WDTCTL_L
 00002400   __STACK_END
 000000a0   __STACK_SIZE
-00004484   __TI_CINIT_Base
-00004494   __TI_CINIT_Limit
-00004468   __TI_Handler_Table_Base
-00004474   __TI_Handler_Table_Limit
+0000449a   __TI_CINIT_Base
+000044aa   __TI_CINIT_Limit
+00004480   __TI_Handler_Table_Base
+0000448c   __TI_Handler_Table_Limit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
-0001042a   __TI_ISR_TRAP
+000101aa   __TI_ISR_TRAP
 00000001   __TI_args_main
-00010418   __TI_decompress_none
-00010430   __TI_decompress_rle24
+00010198   __TI_decompress_none
+000101b0   __TI_decompress_rle24
 00000001   __TI_exit
 0000ffcc   __TI_int30
 0000ffce   __TI_int31
@@ -1099,29 +1095,25 @@ UNDEFED    __TI_INITARRAY_Limit
 0000fff8   __TI_int52
 0000fffa   __TI_int53
 0000fffc   __TI_int54
-000103bc   __TI_zero_init
+00010160   __TI_zero_init
 ffffffff   __binit__
 ffffffff   __c_args__
-00010006   __mspabi_addf
-000103e0   __mspabi_fltuf
-00010236   __mspabi_mpyf
-00010000   __mspabi_subf
-000102ec   _auto_init_hold_wdt
-00004440   _c_int00
-00004440   _c_int00_noexit
+00010090   _auto_init_hold_wdt
+0000445a   _c_int00
+0000445a   _c_int00_noexit
 0000fffe   _reset_vector
 00002360   _stack
-00010436   _system_pre_init
-0001043a   abort
+000101b6   _system_pre_init
+000101ba   abort
 ffffffff   binit
 00004400   fram_ipe_end
 00004400   fram_ipe_start
 00004400   fram_rx_start
-00001c04   g_rxArr
-00001c06   g_rxCount
-00001c00   hum
-00010130   main
-00010404   memcpy
+00001c17   g_byteCount
+00001c00   g_calBytes
+00001c16   g_calCount
+00010000   main
+00010184   memcpy
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1928,22 +1920,21 @@ address    name
 000009ce   AESAXIN
 000009ce   AESAXIN_L
 000009cf   AESAXIN_H
-00001c00   hum
-00001c04   g_rxArr
-00001c06   g_rxCount
+00001c00   g_calBytes
+00001c16   g_calCount
+00001c17   g_byteCount
 00002360   _stack
 00002400   __STACK_END
 00004400   USCI_B0_ISR
 00004400   fram_ipe_end
 00004400   fram_ipe_start
 00004400   fram_rx_start
-00004440   _c_int00
-00004440   _c_int00_noexit
-0000445a   Timer0_B0_ISR
-00004468   __TI_Handler_Table_Base
-00004474   __TI_Handler_Table_Limit
-00004484   __TI_CINIT_Base
-00004494   __TI_CINIT_Limit
+0000445a   _c_int00
+0000445a   _c_int00_noexit
+00004480   __TI_Handler_Table_Base
+0000448c   __TI_Handler_Table_Limit
+0000449a   __TI_CINIT_Base
+000044aa   __TI_CINIT_Limit
 0000ffcc   __TI_int30
 0000ffce   __TI_int31
 0000ffd0   __TI_int32
@@ -1970,24 +1961,20 @@ address    name
 0000fffa   __TI_int53
 0000fffc   __TI_int54
 0000fffe   _reset_vector
-00010000   __mspabi_subf
-00010006   __mspabi_addf
-00010130   main
-00010236   __mspabi_mpyf
-000102ec   _auto_init_hold_wdt
-000103bc   __TI_zero_init
-000103e0   __mspabi_fltuf
-00010404   memcpy
-00010418   __TI_decompress_none
-0001042a   __TI_ISR_TRAP
-00010430   __TI_decompress_rle24
-00010436   _system_pre_init
-0001043a   C$$EXIT
-0001043a   abort
+00010000   main
+00010090   _auto_init_hold_wdt
+00010160   __TI_zero_init
+00010184   memcpy
+00010198   __TI_decompress_none
+000101aa   __TI_ISR_TRAP
+000101b0   __TI_decompress_rle24
+000101b6   _system_pre_init
+000101ba   C$$EXIT
+000101ba   abort
 ffffffff   __binit__
 ffffffff   __c_args__
 ffffffff   binit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 
-[861 symbols]
+[856 symbols]

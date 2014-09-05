@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v4.3.4                      
 ******************************************************************************
->> Linked Tue Aug 26 00:01:37 2014
+>> Linked Tue Sep 02 14:10:38 2014
 
 OUTPUT FILE NAME:   <SHT21_Temp.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00004440
@@ -79,7 +79,7 @@ MEMORY CONFIGURATION
   INT53                 0000fffa   00000002  00000002  00000000  RWIX
   INT54                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FRAM2                 00010000   00004000  0000043c  00003bc4  RWIX
+  FRAM2                 00010000   00004000  00000442  00003bbe  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -226,20 +226,20 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.obj (.reset)
 
-.text      0    00010000    0000043c     
+.text      0    00010000    00000442     
                   00010000    00000130     rts430x_lc_rd_eabi.lib : fs_add.obj (.text)
-                  00010130    00000104     main_SHT21_Temp.obj (.text:main)
-                  00010234    000000b6     rts430x_lc_rd_eabi.lib : fs_mpy.obj (.text)
-                  000102ea    0000006e                            : autoinit.obj (.text:_auto_init_hold_wdt)
-                  00010358    00000062                            : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
-                  000103ba    00000024                            : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
-                  000103de    00000024                            : fs_utof.obj (.text)
-                  00010402    00000014                            : memcpy.obj (.text:memcpy)
-                  00010416    00000012                            : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
-                  00010428    00000006                            : isr_trap.obj (.text:__TI_ISR_TRAP)
-                  0001042e    00000006                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
-                  00010434    00000004                            : pre_init.obj (.text:_system_pre_init)
-                  00010438    00000004                            : exit.obj (.text:abort)
+                  00010130    0000010a     main_SHT21_Temp.obj (.text:main)
+                  0001023a    000000b6     rts430x_lc_rd_eabi.lib : fs_mpy.obj (.text)
+                  000102f0    0000006e                            : autoinit.obj (.text:_auto_init_hold_wdt)
+                  0001035e    00000062                            : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
+                  000103c0    00000024                            : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
+                  000103e4    00000024                            : fs_utof.obj (.text)
+                  00010408    00000014                            : memcpy.obj (.text:memcpy)
+                  0001041c    00000012                            : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
+                  0001042e    00000006                            : isr_trap.obj (.text:__TI_ISR_TRAP)
+                  00010434    00000006                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
+                  0001043a    00000004                            : pre_init.obj (.text:_system_pre_init)
+                  0001043e    00000004                            : exit.obj (.text:abort)
 
 
 LINKER GENERATED COPY TABLES
@@ -518,7 +518,7 @@ address    name
 000009ce   AESAXIN_L
 000004be   BCD2BIN
 000004bc   BIN2BCD
-00010438   C$$EXIT
+0001043e   C$$EXIT
 0000043e   CAPTIO0CTL
 0000043f   CAPTIO0CTL_H
 0000043e   CAPTIO0CTL_L
@@ -1069,10 +1069,10 @@ address    name
 00004474   __TI_Handler_Table_Limit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
-00010428   __TI_ISR_TRAP
+0001042e   __TI_ISR_TRAP
 00000001   __TI_args_main
-00010416   __TI_decompress_none
-0001042e   __TI_decompress_rle24
+0001041c   __TI_decompress_none
+00010434   __TI_decompress_rle24
 00000001   __TI_exit
 0000ffcc   __TI_int30
 0000ffce   __TI_int31
@@ -1099,20 +1099,20 @@ UNDEFED    __TI_INITARRAY_Limit
 0000fff8   __TI_int52
 0000fffa   __TI_int53
 0000fffc   __TI_int54
-000103ba   __TI_zero_init
+000103c0   __TI_zero_init
 ffffffff   __binit__
 ffffffff   __c_args__
 00010006   __mspabi_addf
-000103de   __mspabi_fltuf
-00010234   __mspabi_mpyf
+000103e4   __mspabi_fltuf
+0001023a   __mspabi_mpyf
 00010000   __mspabi_subf
-000102ea   _auto_init_hold_wdt
+000102f0   _auto_init_hold_wdt
 00004440   _c_int00
 00004440   _c_int00_noexit
 0000fffe   _reset_vector
 00002360   _stack
-00010434   _system_pre_init
-00010438   abort
+0001043a   _system_pre_init
+0001043e   abort
 ffffffff   binit
 00004400   fram_ipe_end
 00004400   fram_ipe_start
@@ -1120,7 +1120,7 @@ ffffffff   binit
 00001c04   g_rxArr
 00001c06   g_rxCount
 00010130   main
-00010402   memcpy
+00010408   memcpy
 00001c00   temp
 
 
@@ -1973,17 +1973,17 @@ address    name
 00010000   __mspabi_subf
 00010006   __mspabi_addf
 00010130   main
-00010234   __mspabi_mpyf
-000102ea   _auto_init_hold_wdt
-000103ba   __TI_zero_init
-000103de   __mspabi_fltuf
-00010402   memcpy
-00010416   __TI_decompress_none
-00010428   __TI_ISR_TRAP
-0001042e   __TI_decompress_rle24
-00010434   _system_pre_init
-00010438   C$$EXIT
-00010438   abort
+0001023a   __mspabi_mpyf
+000102f0   _auto_init_hold_wdt
+000103c0   __TI_zero_init
+000103e4   __mspabi_fltuf
+00010408   memcpy
+0001041c   __TI_decompress_none
+0001042e   __TI_ISR_TRAP
+00010434   __TI_decompress_rle24
+0001043a   _system_pre_init
+0001043e   C$$EXIT
+0001043e   abort
 ffffffff   __binit__
 ffffffff   __c_args__
 ffffffff   binit
