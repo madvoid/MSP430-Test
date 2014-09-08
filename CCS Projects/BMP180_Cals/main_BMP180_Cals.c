@@ -101,16 +101,19 @@ int main(void) {
 	  UCB0IE |= UCRXIE;					// Set rx interrupt
 	  UCB0IE &= ~UCTXIE;				// Clear tx interrupt
 
-	  // Send address
-	  UCB0CTLW0 |= UCTXSTT;				// Send start
-	  while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt flag
-	  UCB0TXBUF = g_calRegs[g_calCount];// Send data byte
-	  while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt flag
-	  UCB0CTLW0 &= ~UCTR;				// Change to receive
-	  UCB0CTLW0 |= UCTXSTT;				// Send restart
-	  while(UCB0CTLW0 & UCTXSTT);		// Wait for start
-	  __bis_SR_register(LPM0_bits);		// Enter low power mode and wait for bytes
-	  while(UCB0CTLW0 & UCTXSTP);		// Wait for stop - more for debugging purposes
+	  while(g_calCount < 11){
+		  UCB0CTLW0 |= UCTXSTT;				// Send start
+		  while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt flag
+		  UCB0TXBUF = g_calRegs[g_calCount];// Send data byte
+		  while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt flag
+		  UCB0CTLW0 &= ~UCTR;				// Change to receive
+		  UCB0CTLW0 |= UCTXSTT;				// Send restart
+		  while(UCB0CTLW0 & UCTXSTT);		// Wait for start
+		  __bis_SR_register(LPM0_bits);		// Enter low power mode and wait for bytes
+		  g_calCount++;						// Increment calibration count
+		  g_byteCount = 0;					// Reset byte count
+		  UCB0CTLW0 |= UCTR;				// tx mode
+	  }
 
 	  __no_operation();
 }
