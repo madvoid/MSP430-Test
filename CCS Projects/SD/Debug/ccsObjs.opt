@@ -1,0 +1,1 @@
+"./main_SD.obj" "./FatFS/HAL_SDCard.obj" "./FatFS/ff.obj" "./FatFS/mmc.obj" "../lnk_msp430fr5969.cmd" -l"libc.a" -l"libmath.a" 
