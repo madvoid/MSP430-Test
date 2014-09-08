@@ -57,9 +57,9 @@
 
 // Global --------------------------------------------------------------------------------------------
 static const uint8_t g_calRegs[11] = {BMP180_REG_CAL_AC1, BMP180_REG_CAL_AC2, BMP180_REG_CAL_AC3, BMP180_REG_CAL_AC4, BMP180_REG_CAL_AC5, BMP180_REG_CAL_AC6, BMP180_REG_CAL_B1, BMP180_REG_CAL_B2, BMP180_REG_CAL_MB, BMP180_REG_CAL_MC, BMP180_REG_CAL_MD};
-uint8_t g_calBytes[22];		// Received byte storage
-uint8_t g_calCount = 0;		// Calibration values recieved
-uint8_t g_byteCount = 0;	// Bytes received in interrupt vector
+volatile uint8_t g_calBytes[22];		// Received byte storage
+volatile uint8_t g_calCount = 0;		// Calibration values recieved
+volatile uint8_t g_byteCount = 0;	// Bytes received in interrupt vector
 
 
 
@@ -94,18 +94,23 @@ int main(void) {
 	  UCB0CTLW0 |= UCSWRST;                     // Software reset enabled
 	  UCB0CTLW0 |= UCMODE_3 | UCMST | UCSYNC | UCTR | UCSSEL__SMCLK;   // I2C mode, Master mode, sync, Sending, SMCLK
 	  UCB0BRW = 0x0004;                         // baudrate = SMCLK / 4
+	  UCB0CTLW1 |= UCASTP_2;
+	  UCB0TBCNT = 0x02;
 	  UCB0I2CSA = BMP180_I2C_ADDRESS;            // Slave address
 	  UCB0CTL1 &= ~UCSWRST;						 // Clear reset
-	  UCB0IE |= UCTXIE0 | UCRXIE0;
+	  UCB0IE |= UCRXIE;					// Set rx interrupt
+	  UCB0IE &= ~UCTXIE;				// Clear tx interrupt
 
-	  while(g_calCount < 11){
-		  UCB0CTL1 |= UCTXSTT;				// Start transfer
-		  while (UCB0CTLW0 & UCTXSTT);  	// Ensure start condition got sent
-		  __bis_SR_register(LPM0_bits);     // Enter LPM0 w/ interrupts
-		  UCB0CTL1 |= UCTXSTP;				// Send stop
-		  UCB0CTL1 |= UCTR;					// Change to write
-		  g_calCount++;						// Increment calibration count
-	  }
+	  // Send address
+	  UCB0CTLW0 |= UCTXSTT;				// Send start
+	  while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt flag
+	  UCB0TXBUF = g_calRegs[g_calCount];// Send data byte
+	  while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt flag
+	  UCB0CTLW0 &= ~UCTR;				// Change to receive
+	  UCB0CTLW0 |= UCTXSTT;				// Send restart
+	  while(UCB0CTLW0 & UCTXSTT);		// Wait for start
+	  __bis_SR_register(LPM0_bits);		// Enter low power mode and wait for bytes
+	  while(UCB0CTLW0 & UCTXSTP);		// Wait for stop - more for debugging purposes
 
 	  __no_operation();
 }
@@ -125,8 +130,7 @@ void __attribute__ ((interrupt(USCI_B0_VECTOR))) USCI_B0_ISR (void)
 #error Compiler not supported!
 #endif
 {
-  switch(__even_in_range(UCB0IV, USCI_I2C_UCBIT9IFG))
-  {
+  switch(__even_in_range(UCB0IV, USCI_I2C_UCBIT9IFG)){
     case USCI_NONE:          break;         // Vector 0: No interrupts
     case USCI_I2C_UCALIFG:   break;         // Vector 2: ALIFG
     case USCI_I2C_UCNACKIFG: break;         // Vector 4: NACKIFG
@@ -139,19 +143,13 @@ void __attribute__ ((interrupt(USCI_B0_VECTOR))) USCI_B0_ISR (void)
     case USCI_I2C_UCRXIFG1:  break;         // Vector 18: RXIFG1
     case USCI_I2C_UCTXIFG1:  break;         // Vector 20: TXIFG1
     case USCI_I2C_UCRXIFG0:  		        // Vector 22: RXIFG0
-    	__no_operation();
     	g_calBytes[2*g_calCount+g_byteCount] = UCB0RXBUF;	// Read rxbuffer
     	g_byteCount++;						// Increment byte count
     	if(g_byteCount == 2){
-    		g_byteCount = 0;				// Reset byte count
-//    		UCB0CTL1 |= UCTXSTP;			// Send stop
     		__bic_SR_register_on_exit(LPM0_bits); 	// Exit LPM0
     	}
     	break;
     case USCI_I2C_UCTXIFG0:                 // Vector 24: TXIFG0
-    	UCB0TXBUF = g_calRegs[g_calCount];
-    	UCB0CTLW0 &= ~UCTR;					// Change to read
-    	UCB0CTL1 |= UCTXSTT;				// Send restart
     	break;
     default: break;
   }
