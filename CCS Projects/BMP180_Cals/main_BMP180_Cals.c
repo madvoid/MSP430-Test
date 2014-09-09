@@ -60,7 +60,19 @@ static const uint8_t g_calRegs[11] = {BMP180_REG_CAL_AC1, BMP180_REG_CAL_AC2, BM
 volatile uint8_t g_calBytes[22];		// Received byte storage
 volatile uint8_t g_calCount = 0;		// Calibration values recieved
 volatile uint8_t g_byteCount = 0;	// Bytes received in interrupt vector
-
+typedef struct{
+	int16_t  ac1;
+	int16_t  ac2;
+	int16_t  ac3;
+	uint16_t ac4;
+	uint16_t ac5;
+	uint16_t ac6;
+	int16_t  b1;
+	int16_t  b2;
+	int16_t  mb;
+	int16_t  mc;
+	int16_t  md;
+} tBMP180Cals;
 
 
 // Main ----------------------------------------------------------------------------------------------
@@ -114,6 +126,20 @@ int main(void) {
 		  g_byteCount = 0;					// Reset byte count
 		  UCB0CTLW0 |= UCTR;				// tx mode
 	  }
+
+	  tBMP180Cals BmpCals;
+
+	  BmpCals.ac1 = (int16_t) ( (g_calBytes[0] << 8) | g_calBytes[1] );
+	  BmpCals.ac2 = (int16_t) ( (g_calBytes[2] << 8) | g_calBytes[3] );
+	  BmpCals.ac3 = (int16_t) ( (g_calBytes[4] << 8) | g_calBytes[5] );
+	  BmpCals.ac4 = (uint16_t)( (g_calBytes[6] << 8) | g_calBytes[7] );
+	  BmpCals.ac5 = (uint16_t)( (g_calBytes[8] << 8) | g_calBytes[9] );
+	  BmpCals.ac6 = (uint16_t)( (g_calBytes[10] << 8) | g_calBytes[11] );
+	  BmpCals.b1  = (int16_t) ( (g_calBytes[12] << 8) | g_calBytes[13] );
+	  BmpCals.b2  = (int16_t) ( (g_calBytes[14] << 8) | g_calBytes[15] );
+	  BmpCals.mb  = (int16_t) ( (g_calBytes[16] << 8) | g_calBytes[17] );
+	  BmpCals.mc  = (int16_t) ( (g_calBytes[18] << 8) | g_calBytes[19] );
+	  BmpCals.md  = (int16_t) ( (g_calBytes[20] << 8) | g_calBytes[21] );
 
 	  __no_operation();
 }

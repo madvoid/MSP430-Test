@@ -37,9 +37,8 @@
 // Variables -----------------------------------------------------------------------------------------
 volatile unsigned char g_shtRxArr[2];
 volatile uint8_t g_shtRxCount;
-volatile uint8_t g_shtTxCommand;
-float temp;
-float hum;
+float g_temp;
+float g_hum;
 
 
 // Functions -----------------------------------------------------------------------------------------

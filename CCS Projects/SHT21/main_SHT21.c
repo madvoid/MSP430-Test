@@ -97,16 +97,13 @@ void __attribute__ ((interrupt(USCI_B0_VECTOR))) USCI_B0_ISR (void)
     case USCI_I2C_UCRXIFG1:  break;         // Vector 18: RXIFG1
     case USCI_I2C_UCTXIFG1:  break;         // Vector 20: TXIFG1
     case USCI_I2C_UCRXIFG0:  		        // Vector 22: RXIFG0
-    	if(g_shtRxCount < 2){
-    		g_shtRxArr[g_shtRxCount] = UCB0RXBUF;	// Read byte from SHT21
-    		g_shtRxCount++;
-    	}
+		g_shtRxArr[g_shtRxCount] = UCB0RXBUF;	// Read byte from SHT21
+		g_shtRxCount++;
     	if(g_shtRxCount == 2){
     		__bic_SR_register_on_exit(LPM0_bits); 	// Exit LPM0
     	}
     	break;
     case USCI_I2C_UCTXIFG0:                 // Vector 24: TXIFG0
-    	UCB0TXBUF = g_shtTxCommand;
     	break;
     default: break;
   }
