@@ -21,58 +21,19 @@
 
 
 
-
 // Includes ------------------------------------------------------------------------------------------
 #include <stdint.h>
 #include <msp430.h>
-
+#include "bmpLib.h"
 
 
 
 // Defines -------------------------------------------------------------------------------------------
-// BMP180 Registers & Commands
-#define BMP180_I2C_ADDRESS 0x77
-#define BMP180_READ_TEMP 0x2E
-#define BMP180_READ_PRES_BASE 0x34
-#define BMP180_REG_CAL_AC1 0xAA
-#define BMP180_REG_CAL_AC2 0xAC
-#define BMP180_REG_CAL_AC3 0xAE
-#define BMP180_REG_CAL_AC4 0xB0
-#define BMP180_REG_CAL_AC5 0xB2
-#define BMP180_REG_CAL_AC6 0xB4
-#define BMP180_REG_CAL_B1  0xB6
-#define BMP180_REG_CAL_B2  0xB8
-#define BMP180_REG_CAL_MB  0xBA
-#define BMP180_REG_CAL_MC  0xBC
-#define BMP180_REG_CAL_MD  0xBE
-#define BMP180_REG_CHIPID  0xD0
-#define BMP180_REG_VERSION 0xD1
-#define BMP180_REG_SOFTRESET 0xE0
-#define BMP180_REG_CONTROL 0xF4
-#define BMP180_REG_TEMPDATA 0xF6
-#define BMP180_REG_PRESSUREDATA 0xF6
-
 
 
 
 // Global --------------------------------------------------------------------------------------------
-static const uint8_t g_calRegs[11] = {BMP180_REG_CAL_AC1, BMP180_REG_CAL_AC2, BMP180_REG_CAL_AC3, BMP180_REG_CAL_AC4, BMP180_REG_CAL_AC5, BMP180_REG_CAL_AC6, BMP180_REG_CAL_B1, BMP180_REG_CAL_B2, BMP180_REG_CAL_MB, BMP180_REG_CAL_MC, BMP180_REG_CAL_MD};
-volatile uint8_t g_calBytes[22];		// Received byte storage
-volatile uint8_t g_calCount = 0;		// Calibration values recieved
-volatile uint8_t g_byteCount = 0;	// Bytes received in interrupt vector
-typedef struct{
-	int16_t  ac1;
-	int16_t  ac2;
-	int16_t  ac3;
-	uint16_t ac4;
-	uint16_t ac5;
-	uint16_t ac6;
-	int16_t  b1;
-	int16_t  b2;
-	int16_t  mb;
-	int16_t  mc;
-	int16_t  md;
-} tBMP180Cals;
+
 
 
 // Main ----------------------------------------------------------------------------------------------
@@ -102,44 +63,11 @@ int main(void) {
 	  // Enable interrupts
 	  __bis_SR_register(GIE);
 
-	  // Configure USCI_B0 for I2C mode - Sending
-	  UCB0CTLW0 |= UCSWRST;                     // Software reset enabled
-	  UCB0CTLW0 |= UCMODE_3 | UCMST | UCSYNC | UCTR | UCSSEL__SMCLK;   // I2C mode, Master mode, sync, Sending, SMCLK
-	  UCB0BRW = 0x0004;                         // baudrate = SMCLK / 4
-	  UCB0CTLW1 |= UCASTP_2;
-	  UCB0TBCNT = 0x02;
-	  UCB0I2CSA = BMP180_I2C_ADDRESS;            // Slave address
-	  UCB0CTL1 &= ~UCSWRST;						 // Clear reset
-	  UCB0IE |= UCRXIE;					// Set rx interrupt
-	  UCB0IE &= ~UCTXIE;				// Clear tx interrupt
-
-	  while(g_calCount < 11){
-		  UCB0CTLW0 |= UCTXSTT;				// Send start
-		  while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt flag
-		  UCB0TXBUF = g_calRegs[g_calCount];// Send data byte
-		  while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt flag
-		  UCB0CTLW0 &= ~UCTR;				// Change to receive
-		  UCB0CTLW0 |= UCTXSTT;				// Send restart
-		  while(UCB0CTLW0 & UCTXSTT);		// Wait for start
-		  __bis_SR_register(LPM0_bits);		// Enter low power mode and wait for bytes
-		  g_calCount++;						// Increment calibration count
-		  g_byteCount = 0;					// Reset byte count
-		  UCB0CTLW0 |= UCTR;				// tx mode
-	  }
-
+	  // Create structure instance
 	  tBMP180Cals BmpCals;
 
-	  BmpCals.ac1 = (int16_t) ( (g_calBytes[0] << 8) | g_calBytes[1] );
-	  BmpCals.ac2 = (int16_t) ( (g_calBytes[2] << 8) | g_calBytes[3] );
-	  BmpCals.ac3 = (int16_t) ( (g_calBytes[4] << 8) | g_calBytes[5] );
-	  BmpCals.ac4 = (uint16_t)( (g_calBytes[6] << 8) | g_calBytes[7] );
-	  BmpCals.ac5 = (uint16_t)( (g_calBytes[8] << 8) | g_calBytes[9] );
-	  BmpCals.ac6 = (uint16_t)( (g_calBytes[10] << 8) | g_calBytes[11] );
-	  BmpCals.b1  = (int16_t) ( (g_calBytes[12] << 8) | g_calBytes[13] );
-	  BmpCals.b2  = (int16_t) ( (g_calBytes[14] << 8) | g_calBytes[15] );
-	  BmpCals.mb  = (int16_t) ( (g_calBytes[16] << 8) | g_calBytes[17] );
-	  BmpCals.mc  = (int16_t) ( (g_calBytes[18] << 8) | g_calBytes[19] );
-	  BmpCals.md  = (int16_t) ( (g_calBytes[20] << 8) | g_calBytes[21] );
+	  // Get calibration values
+	  BMP180GetCalVals(&BmpCals);
 
 	  __no_operation();
 }
@@ -172,9 +100,9 @@ void __attribute__ ((interrupt(USCI_B0_VECTOR))) USCI_B0_ISR (void)
     case USCI_I2C_UCRXIFG1:  break;         // Vector 18: RXIFG1
     case USCI_I2C_UCTXIFG1:  break;         // Vector 20: TXIFG1
     case USCI_I2C_UCRXIFG0:  		        // Vector 22: RXIFG0
-    	g_calBytes[2*g_calCount+g_byteCount] = UCB0RXBUF;	// Read rxbuffer
-    	g_byteCount++;						// Increment byte count
-    	if(g_byteCount == 2){
+    	g_bmpCalBytes[2*g_bmpCalCount+g_bmpByteCount] = UCB0RXBUF;	// Read rxbuffer
+    	g_bmpByteCount++;						// Increment byte count
+    	if(g_bmpByteCount == 2){
     		__bic_SR_register_on_exit(LPM0_bits); 	// Exit LPM0
     	}
     	break;

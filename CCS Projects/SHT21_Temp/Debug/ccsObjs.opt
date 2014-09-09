@@ -1,1 +1,0 @@
-"./main_SHT21_Temp.obj" "../lnk_msp430fr5969.cmd" -l"libc.a" -l"libmath.a" 

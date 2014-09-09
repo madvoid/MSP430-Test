@@ -8,6 +8,7 @@ CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/msp430_4.3.4
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
+"./bmpLib.obj" \
 "./main_BMP180_Cals.obj" \
 "../lnk_msp430fr5969.cmd" \
 -l"libc.a" \
@@ -141,8 +142,8 @@ BMP180_Cals.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "main_BMP180_Cals.pp" 
-	-$(RM) "main_BMP180_Cals.obj" 
+	-$(RM) "bmpLib.pp" "main_BMP180_Cals.pp" 
+	-$(RM) "bmpLib.obj" "main_BMP180_Cals.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
