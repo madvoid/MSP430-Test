@@ -24,12 +24,17 @@
 // Includes ------------------------------------------------------------------------------------------
 #include <msp430.h>
 #include <stdint.h>
+#include "main.h"
 #include "bmpLib.h"
+
 
 
 
 // Functions -----------------------------------------------------------------------------------------
 void BMP180GetCalVals(tBMP180Cals *calInst){
+
+	// Set sensor code
+	g_sensorCode = SCODE_BMP180_CALS;
 
 	// Reset counts
 	g_bmpByteCount = 0;

@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker PC v4.3.4                      
 ******************************************************************************
->> Linked Tue Sep 09 00:03:27 2014
+>> Linked Thu Sep 11 00:00:32 2014
 
 OUTPUT FILE NAME:   <BMP180_Cals.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 00004432
+ENTRY POINT SYMBOL: "_c_int00"  address: 00004438
 
 
 MEMORY CONFIGURATION
@@ -18,8 +18,8 @@ MEMORY CONFIGURATION
   INFOC                 00001880   00000080  00000000  00000080  RWIX
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
-  RAM                   00001c00   00000800  000000b8  00000748  RWIX
-  FRAM                  00004400   0000bb80  00000069  0000bb17  RWIX
+  RAM                   00001c00   00000800  000000b9  00000747  RWIX
+  FRAM                  00004400   0000bb80  0000006f  0000bb11  RWIX
   JTAGSIGNATURE         0000ff80   00000004  00000004  00000000  RWIX  ffff 
   BSLSIGNATURE          0000ff84   00000004  00000004  00000000  RWIX  ffff 
   IPESIGNATURE          0000ff88   00000008  00000008  00000000  RWIX  ffff 
@@ -79,7 +79,7 @@ MEMORY CONFIGURATION
   INT53                 0000fffa   00000002  00000002  00000000  RWIX
   INT54                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FRAM2                 00010000   00004000  0000023c  00003dc4  RWIX
+  FRAM2                 00010000   00004000  00000244  00003dbc  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -90,10 +90,11 @@ section   page    origin      length       input sections
 .init_array 
 *          0    00004400    00000000     UNINITIALIZED
 
-.bss       0    00001c00    00000018     UNINITIALIZED
+.bss       0    00001c00    00000019     UNINITIALIZED
                   00001c00    00000016     (.common:g_bmpCalBytes)
                   00001c16    00000001     (.common:g_bmpByteCount)
                   00001c17    00000001     (.common:g_bmpCalCount)
+                  00001c18    00000001     (.common:g_sensorCode)
 
 .stack     0    00002360    000000a0     UNINITIALIZED
                   00002360    00000004     rts430x_lc_rd_eabi.lib : boot.obj (.stack)
@@ -107,9 +108,9 @@ section   page    origin      length       input sections
 .sysmem    0    00004400    00000000     UNINITIALIZED
 
 .text:_isr 
-*          0    00004400    0000004c     
-                  00004400    00000032     main_BMP180_Cals.obj (.text:_isr:USCI_B0_ISR)
-                  00004432    0000001a     rts430x_lc_rd_eabi.lib : boot.obj (.text:_isr:_c_int00_noexit)
+*          0    00004400    00000052     
+                  00004400    00000038     main_BMP180_Cals.obj (.text:_isr:USCI_B0_ISR)
+                  00004438    0000001a     rts430x_lc_rd_eabi.lib : boot.obj (.text:_isr:_c_int00_noexit)
 
 .ipestruct 
 *          0    00004400    00000000     UNINITIALIZED
@@ -119,13 +120,13 @@ section   page    origin      length       input sections
 .ipe:_isr 
 *          0    00004400    00000000     UNINITIALIZED
 
-.const     0    0000444c    0000000b     
-                  0000444c    0000000b     bmpLib.obj (.const:.string:g_bmpCalRegs)
+.const     0    00004452    0000000b     
+                  00004452    0000000b     bmpLib.obj (.const:.string:g_bmpCalRegs)
 
-.cinit     0    00004458    00000012     
-                  00004458    00000006     (.cinit..bss.load) [load image, compression = zero_init]
-                  0000445e    00000004     (__TI_handler_table)
-                  00004462    00000008     (__TI_cinit_table)
+.cinit     0    0000445e    00000012     
+                  0000445e    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  00004464    00000004     (__TI_handler_table)
+                  00004468    00000008     (__TI_cinit_table)
 
 $fill000   0    0000ff80    00000004     
                   0000ff80    00000004     --HOLE-- [fill = ffff]
@@ -224,25 +225,25 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.obj (.reset)
 
-.text      0    00010000    0000023c     
-                  00010000    00000148     bmpLib.obj (.text:BMP180GetCalVals)
-                  00010148    0000006e     rts430x_lc_rd_eabi.lib : autoinit.obj (.text:_auto_init_hold_wdt)
-                  000101b6    00000054     main_BMP180_Cals.obj (.text:main)
-                  0001020a    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
-                  0001022e    00000006                            : isr_trap.obj (.text:__TI_ISR_TRAP)
-                  00010234    00000004                            : pre_init.obj (.text:_system_pre_init)
-                  00010238    00000004                            : exit.obj (.text:abort)
+.text      0    00010000    00000244     
+                  00010000    0000014c     bmpLib.obj (.text:BMP180GetCalVals)
+                  0001014c    0000006e     rts430x_lc_rd_eabi.lib : autoinit.obj (.text:_auto_init_hold_wdt)
+                  000101ba    00000058     main_BMP180_Cals.obj (.text:main)
+                  00010212    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
+                  00010236    00000006                            : isr_trap.obj (.text:__TI_ISR_TRAP)
+                  0001023c    00000004                            : pre_init.obj (.text:_system_pre_init)
+                  00010240    00000004                            : exit.obj (.text:abort)
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00004462 records: 1, size/record: 8, table size: 8
-	.bss: load addr=00004458, load size=00000006 bytes, run addr=00001c00, run size=00000018 bytes, compression=zero_init
+__TI_cinit_table @ 00004468 records: 1, size/record: 8, table size: 8
+	.bss: load addr=0000445e, load size=00000006 bytes, run addr=00001c00, run size=00000019 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 0000445e records: 1, size/record: 4, table size: 4
+__TI_handler_table @ 00004464 records: 1, size/record: 4, table size: 4
 	index: 0, handler: __TI_zero_init
 
 
@@ -508,7 +509,7 @@ address    name
 000004be   BCD2BIN
 000004bc   BIN2BCD
 00010000   BMP180GetCalVals
-00010238   C$$EXIT
+00010240   C$$EXIT
 0000043e   CAPTIO0CTL
 0000043f   CAPTIO0CTL_H
 0000043e   CAPTIO0CTL_L
@@ -1052,13 +1053,13 @@ address    name
 0000015c   WDTCTL_L
 00002400   __STACK_END
 000000a0   __STACK_SIZE
-00004462   __TI_CINIT_Base
-0000446a   __TI_CINIT_Limit
-0000445e   __TI_Handler_Table_Base
-00004462   __TI_Handler_Table_Limit
+00004468   __TI_CINIT_Base
+00004470   __TI_CINIT_Limit
+00004464   __TI_Handler_Table_Base
+00004468   __TI_Handler_Table_Limit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
-0001022e   __TI_ISR_TRAP
+00010236   __TI_ISR_TRAP
 00000001   __TI_args_main
 00000001   __TI_exit
 0000ffcc   __TI_int30
@@ -1086,16 +1087,16 @@ UNDEFED    __TI_INITARRAY_Limit
 0000fff8   __TI_int52
 0000fffa   __TI_int53
 0000fffc   __TI_int54
-0001020a   __TI_zero_init
+00010212   __TI_zero_init
 ffffffff   __binit__
 ffffffff   __c_args__
-00010148   _auto_init_hold_wdt
-00004432   _c_int00
-00004432   _c_int00_noexit
+0001014c   _auto_init_hold_wdt
+00004438   _c_int00
+00004438   _c_int00_noexit
 0000fffe   _reset_vector
 00002360   _stack
-00010234   _system_pre_init
-00010238   abort
+0001023c   _system_pre_init
+00010240   abort
 ffffffff   binit
 00004400   fram_ipe_end
 00004400   fram_ipe_start
@@ -1103,7 +1104,8 @@ ffffffff   binit
 00001c16   g_bmpByteCount
 00001c00   g_bmpCalBytes
 00001c17   g_bmpCalCount
-000101b6   main
+00001c18   g_sensorCode
+000101ba   main
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1913,18 +1915,19 @@ address    name
 00001c00   g_bmpCalBytes
 00001c16   g_bmpByteCount
 00001c17   g_bmpCalCount
+00001c18   g_sensorCode
 00002360   _stack
 00002400   __STACK_END
 00004400   USCI_B0_ISR
 00004400   fram_ipe_end
 00004400   fram_ipe_start
 00004400   fram_rx_start
-00004432   _c_int00
-00004432   _c_int00_noexit
-0000445e   __TI_Handler_Table_Base
-00004462   __TI_CINIT_Base
-00004462   __TI_Handler_Table_Limit
-0000446a   __TI_CINIT_Limit
+00004438   _c_int00
+00004438   _c_int00_noexit
+00004464   __TI_Handler_Table_Base
+00004468   __TI_CINIT_Base
+00004468   __TI_Handler_Table_Limit
+00004470   __TI_CINIT_Limit
 0000ffcc   __TI_int30
 0000ffce   __TI_int31
 0000ffd0   __TI_int32
@@ -1952,17 +1955,17 @@ address    name
 0000fffc   __TI_int54
 0000fffe   _reset_vector
 00010000   BMP180GetCalVals
-00010148   _auto_init_hold_wdt
-000101b6   main
-0001020a   __TI_zero_init
-0001022e   __TI_ISR_TRAP
-00010234   _system_pre_init
-00010238   C$$EXIT
-00010238   abort
+0001014c   _auto_init_hold_wdt
+000101ba   main
+00010212   __TI_zero_init
+00010236   __TI_ISR_TRAP
+0001023c   _system_pre_init
+00010240   C$$EXIT
+00010240   abort
 ffffffff   __binit__
 ffffffff   __c_args__
 ffffffff   binit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 
-[854 symbols]
+[855 symbols]
