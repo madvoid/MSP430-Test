@@ -71,6 +71,9 @@ int main(void) {
 	  // Get calibration values
 	  BMP180GetCalVals(&BmpCals);
 
+	  // Get temperature values
+	  BMP180GetTemp(&BmpCals);
+
 	  __no_operation();
 }
 
@@ -104,6 +107,8 @@ void __attribute__ ((interrupt(USCI_B0_VECTOR))) USCI_B0_ISR (void)
     case USCI_I2C_UCRXIFG0:  		        // Vector 22: RXIFG0
     	if(g_sensorCode == SCODE_BMP180_CALS){
     		g_bmpCalBytes[2*g_bmpCalCount+g_bmpByteCount] = UCB0RXBUF;	// Read rxbuffer
+    	}else if(g_sensorCode == SCODE_BMP180_VALS){
+    		g_bmpValBytes[g_bmpByteCount] = UCB0RXBUF;
     	}
     	g_bmpByteCount++;						// Increment byte count
     	if(g_bmpByteCount == 2){
@@ -116,3 +121,17 @@ void __attribute__ ((interrupt(USCI_B0_VECTOR))) USCI_B0_ISR (void)
   }
 }
 
+
+// Timer B1 interrupt service routine
+#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
+#pragma vector = TIMER0_B0_VECTOR
+__interrupt void Timer0_B0_ISR(void)
+#elif defined(__GNUC__)
+void __attribute__ ((interrupt(TIMER0_B0_VECTOR))) Timer0_B0_ISR (void)
+#else
+#error Compiler not supported!
+#endif
+{
+	TB0CTL &= ~MC__STOP;
+	__bic_SR_register_on_exit(LPM3_bits); 	// Exit LPM0
+}
