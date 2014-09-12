@@ -9,7 +9,7 @@ CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/msp430_4.3.4
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
 "./bmpLib.obj" \
-"./main_BMP180_Cals.obj" \
+"./main_BMP180.obj" \
 "../lnk_msp430fr5969.cmd" \
 -l"libc.a" \
 -l"libmath.a" \
@@ -110,40 +110,40 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-BMP180_Cals.out \
+BMP180.out \
 
 EXE_OUTPUTS__QUOTED += \
-"BMP180_Cals.out" \
+"BMP180.out" \
 
 BIN_OUTPUTS += \
-BMP180_Cals.hex \
+BMP180.hex \
 
 BIN_OUTPUTS__QUOTED += \
-"BMP180_Cals.hex" \
+"BMP180.hex" \
 
 
 # All Target
-all: BMP180_Cals.out
+all: BMP180.out
 
 # Tool invocations
-BMP180_Cals.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
+BMP180.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MSP430 Linker'
-	"c:/ti/ccsv6/tools/compiler/msp430_4.3.4/bin/cl430" -vmspx --abi=eabi --data_model=restricted --advice:power=all --advice:hw_config=all -g --define=__MSP430FR5969__ --diag_warning=225 --display_error_number --diag_wrap=off --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal -z -m"BMP180_Cals.map" --heap_size=160 --stack_size=160 --use_hw_mpy=F5 --cinit_hold_wdt=on -i"c:/ti/ccsv6/ccs_base/msp430/include" -i"c:/ti/ccsv6/tools/compiler/msp430_4.3.4/lib" -i"c:/ti/ccsv6/tools/compiler/msp430_4.3.4/include" -i"c:/ti/ccsv6/ccs_base/msp430/lib/5xx_6xx_FRxx" -i"c:/ti/ccsv6/ccs_base/msp430/lib/FR59xx" --reread_libs --priority --warn_sections --display_error_number --diag_wrap=off --xml_link_info="BMP180_Cals_linkInfo.xml" --rom_model -o "BMP180_Cals.out" $(ORDERED_OBJS)
+	"c:/ti/ccsv6/tools/compiler/msp430_4.3.4/bin/cl430" -vmspx --abi=eabi --data_model=restricted --advice:power=all --advice:hw_config=all -g --define=__MSP430FR5969__ --diag_warning=225 --display_error_number --diag_wrap=off --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --printf_support=minimal -z -m"BMP180.map" --heap_size=160 --stack_size=160 --use_hw_mpy=F5 --cinit_hold_wdt=on -i"c:/ti/ccsv6/ccs_base/msp430/include" -i"c:/ti/ccsv6/tools/compiler/msp430_4.3.4/lib" -i"c:/ti/ccsv6/tools/compiler/msp430_4.3.4/include" -i"c:/ti/ccsv6/ccs_base/msp430/lib/5xx_6xx_FRxx" -i"c:/ti/ccsv6/ccs_base/msp430/lib/FR59xx" --reread_libs --priority --warn_sections --display_error_number --diag_wrap=off --xml_link_info="BMP180_linkInfo.xml" --rom_model -o "BMP180.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-BMP180_Cals.hex: $(EXE_OUTPUTS)
+BMP180.hex: $(EXE_OUTPUTS)
 	@echo 'Invoking: MSP430 Hex Utility'
-	"c:/ti/ccsv6/tools/compiler/msp430_4.3.4/bin/hex430" --memwidth=8 --romwidth=8 -o "BMP180_Cals.hex" $(EXE_OUTPUTS__QUOTED)
+	"c:/ti/ccsv6/tools/compiler/msp430_4.3.4/bin/hex430" --memwidth=8 --romwidth=8 -o "BMP180.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "bmpLib.pp" "main_BMP180_Cals.pp" 
-	-$(RM) "bmpLib.obj" "main_BMP180_Cals.obj" 
+	-$(RM) "bmpLib.pp" "main_BMP180.pp" 
+	-$(RM) "bmpLib.obj" "main_BMP180.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

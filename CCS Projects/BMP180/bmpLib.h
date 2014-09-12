@@ -58,7 +58,8 @@ static const uint8_t g_bmpCalRegs[11] = {BMP180_REG_CAL_AC1, BMP180_REG_CAL_AC2,
 volatile uint8_t g_bmpCalBytes[22];		// Received byte storage
 volatile uint8_t g_bmpCalCount;		// Calibration values recieved
 volatile uint8_t g_bmpByteCount;	// Bytes received in interrupt vector
-volatile uint8_t g_bmpValBytes[2];	// Bytes received for temperature or pressure
+volatile uint8_t g_bmpByteCountEnd;	// When to stop receiving
+volatile uint8_t g_bmpValBytes[3];	// Bytes received for temperature or pressure
 float g_bmpTemp;
 typedef struct{
 	int16_t  ac1;

@@ -2,7 +2,7 @@
 <link_info>
    <banner>MSP430 Linker PC v4.3.4</banner>
    <copyright>Copyright (c) 2003-2014 Texas Instruments Incorporated</copyright>
-   <link_time>0x54114b36</link_time>
+   <link_time>0x54114d87</link_time>
    <link_errors>0x0</link_errors>
    <output_file>BMP180_Cals.out</output_file>
    <entry_point>
@@ -2952,12 +2952,12 @@
             <allocated_space>
                <start_address>0x4400</start_address>
                <size>0x0</size>
-               <logical_group_ref idref="lg-2"/>
+               <logical_group_ref idref="lg-e"/>
             </allocated_space>
             <allocated_space>
                <start_address>0x4400</start_address>
                <size>0x0</size>
-               <logical_group_ref idref="lg-e"/>
+               <logical_group_ref idref="lg-2"/>
             </allocated_space>
             <allocated_space>
                <start_address>0x4400</start_address>

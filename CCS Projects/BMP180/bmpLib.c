@@ -39,6 +39,7 @@ void BMP180GetCalVals(tBMP180Cals *calInst){
 	// Reset counts
 	g_bmpByteCount = 0;
 	g_bmpCalCount = 0;
+	g_bmpByteCountEnd = 2;		// Each send will be responded with 2 bytes
 
 	// Configure USCI_B0 for I2C mode - Sending
 	UCB0CTLW0 |= UCSWRST;                     // Software reset enabled
@@ -86,6 +87,7 @@ void BMP180GetRawTemp(void){
 
 	// Reset counts
 	g_bmpByteCount = 0;
+	g_bmpByteCountEnd = 2;		// Each send will be responded with 2 bytes
 
 	// Configure USCI_B0 for I2C mode - Sending
 	UCB0CTLW0 |= UCSWRST;                     // Software reset enabled
@@ -101,9 +103,9 @@ void BMP180GetRawTemp(void){
 	// Start transmission
 	UCB0CTLW0 |= UCTXSTT;				// Send start
 	while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt flag
-	UCB0TXBUF = BMP180_READ_TEMP;       // Send data byte
+	UCB0TXBUF = BMP180_REG_CONTROL;     // Send control register address
 	while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt flag
-	UCB0CTLW0 |= UCTXSTP;				// Send stop
+	UCB0TXBUF = BMP180_READ_TEMP;		// Send temperature measurement start command
 	while(UCB0CTLW0 & UCTXSTP);			// Ensure stop condition got sent
 
 	// Setup timer for 4.5ms measurement delay
@@ -122,7 +124,6 @@ void BMP180GetRawTemp(void){
 	UCB0CTLW0 |= UCTXSTT;				// Send restart
 	while(UCB0CTLW0 & UCTXSTT);			// Wait for restart
 	__bis_SR_register(LPM0_bits);		// Enter low power mode and wait for bytes
-	while(UCB0CTLW0 & UCTXSTP);			// Ensure stop condition got sent
 }
 
 

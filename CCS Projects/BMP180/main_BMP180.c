@@ -111,7 +111,7 @@ void __attribute__ ((interrupt(USCI_B0_VECTOR))) USCI_B0_ISR (void)
     		g_bmpValBytes[g_bmpByteCount] = UCB0RXBUF;
     	}
     	g_bmpByteCount++;						// Increment byte count
-    	if(g_bmpByteCount == 2){
+    	if(g_bmpByteCount == g_bmpByteCountEnd){
     		__bic_SR_register_on_exit(LPM0_bits); 	// Exit LPM0
     	}
     	break;

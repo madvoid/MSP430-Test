@@ -8,26 +8,26 @@ CMD_SRCS += \
 
 C_SRCS += \
 ../bmpLib.c \
-../main_BMP180_Cals.c 
+../main_BMP180.c 
 
 OBJS += \
 ./bmpLib.obj \
-./main_BMP180_Cals.obj 
+./main_BMP180.obj 
 
 C_DEPS += \
 ./bmpLib.pp \
-./main_BMP180_Cals.pp 
+./main_BMP180.pp 
 
 C_DEPS__QUOTED += \
 "bmpLib.pp" \
-"main_BMP180_Cals.pp" 
+"main_BMP180.pp" 
 
 OBJS__QUOTED += \
 "bmpLib.obj" \
-"main_BMP180_Cals.obj" 
+"main_BMP180.obj" 
 
 C_SRCS__QUOTED += \
 "../bmpLib.c" \
-"../main_BMP180_Cals.c" 
+"../main_BMP180.c" 
 
 
