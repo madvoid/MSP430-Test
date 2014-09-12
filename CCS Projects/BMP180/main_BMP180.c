@@ -71,8 +71,10 @@ int main(void) {
 	  // Get calibration values
 	  BMP180GetCalVals(&BmpCals);
 
-	  // Get temperature values
-	  BMP180GetTemp(&BmpCals);
+	  // Get Pressure & Temperature Values
+	  // oss = 0,1,2, or 3
+	  // GetPressure() also calls GetTemperature() (by necessity) so you can get both at once
+	  BMP180GetPressure(3, &BmpCals);
 
 	  __no_operation();
 }

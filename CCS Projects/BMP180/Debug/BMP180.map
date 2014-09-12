@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v4.3.4                      
 ******************************************************************************
->> Linked Fri Sep 12 00:18:42 2014
+>> Linked Fri Sep 12 01:59:00 2014
 
 OUTPUT FILE NAME:   <BMP180.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00004450
@@ -18,7 +18,7 @@ MEMORY CONFIGURATION
   INFOC                 00001880   00000080  00000000  00000080  RWIX
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
-  RAM                   00001c00   00000800  000000c2  0000073e  RWIX
+  RAM                   00001c00   00000800  000000c6  0000073a  RWIX
   FRAM                  00004400   0000bb80  00000095  0000baeb  RWIX
   JTAGSIGNATURE         0000ff80   00000004  00000004  00000000  RWIX  ffff 
   BSLSIGNATURE          0000ff84   00000004  00000004  00000000  RWIX  ffff 
@@ -79,7 +79,7 @@ MEMORY CONFIGURATION
   INT53                 0000fffa   00000002  00000002  00000000  RWIX
   INT54                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FRAM2                 00010000   00004000  00000730  000038d0  RWIX
+  FRAM2                 00010000   00004000  00000b3e  000034c2  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -90,14 +90,15 @@ section   page    origin      length       input sections
 .init_array 
 *          0    00004400    00000000     UNINITIALIZED
 
-.bss       0    00001c00    00000022     UNINITIALIZED
+.bss       0    00001c00    00000026     UNINITIALIZED
                   00001c00    00000016     (.common:g_bmpCalBytes)
                   00001c16    00000004     (.common:g_bmpTemp)
                   00001c1a    00000004     (.common:g_bmpValBytes)
-                  00001c1e    00000001     (.common:g_bmpByteCount)
-                  00001c1f    00000001     (.common:g_bmpByteCountEnd)
-                  00001c20    00000001     (.common:g_bmpCalCount)
-                  00001c21    00000001     (.common:g_sensorCode)
+                  00001c1e    00000004     (.common:g_pressure)
+                  00001c22    00000001     (.common:g_bmpByteCount)
+                  00001c23    00000001     (.common:g_bmpByteCountEnd)
+                  00001c24    00000001     (.common:g_bmpCalCount)
+                  00001c25    00000001     (.common:g_sensorCode)
 
 .stack     0    00002360    000000a0     UNINITIALIZED
                   00002360    00000004     rts430x_lc_rd_eabi.lib : boot.obj (.stack)
@@ -229,30 +230,36 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.obj (.reset)
 
-.text      0    00010000    00000730     
-                  00010000    00000150     bmpLib.obj (.text:BMP180GetCalVals)
-                  00010150    00000130     rts430x_lc_rd_eabi.lib : fs_add.obj (.text)
-                  00010280    000000b6                            : fs_mpy.obj (.text)
-                  00010336    0000009a     bmpLib.obj (.text:BMP180GetRawTemp)
-                  000103d0    00000092     bmpLib.obj (.text:BMP180GetTemp)
-                  00010462    0000008e     rts430x_lc_rd_eabi.lib : fs_div.obj (.text)
-                  000104f0    0000006e                            : autoinit.obj (.text:_auto_init_hold_wdt)
-                  0001055e    0000005e     main_BMP180.obj (.text:main)
-                  000105bc    00000058     rts430x_lc_rd_eabi.lib : div32u.obj (.text)
-                  00010614    0000004a                            : fs_ltof.obj (.text)
-                  0001065e    00000040                            : div32s.obj (.text)
-                  0001069e    0000003e                            : lsl32.obj (.text:l_lsl_const)
-                  000106dc    00000024                            : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
-                  00010700    00000022                            : mult32_f5hw.obj (.text)
-                  00010722    00000006                            : isr_trap.obj (.text:__TI_ISR_TRAP)
-                  00010728    00000004                            : pre_init.obj (.text:_system_pre_init)
-                  0001072c    00000004                            : exit.obj (.text:abort)
+.text      0    00010000    00000b3e     
+                  00010000    0000027e     bmpLib.obj (.text:BMP180GetPressure)
+                  0001027e    00000154     bmpLib.obj (.text:BMP180GetCalVals)
+                  000103d2    00000130     rts430x_lc_rd_eabi.lib : fs_add.obj (.text)
+                  00010502    000000e8     bmpLib.obj (.text:BMP180GetRawPressure)
+                  000105ea    000000b6     rts430x_lc_rd_eabi.lib : fs_mpy.obj (.text)
+                  000106a0    0000009e     bmpLib.obj (.text:BMP180GetRawTemp)
+                  0001073e    00000092     bmpLib.obj (.text:BMP180GetTemp)
+                  000107d0    0000008e     rts430x_lc_rd_eabi.lib : fs_div.obj (.text)
+                  0001085e    0000006e                            : autoinit.obj (.text:_auto_init_hold_wdt)
+                  000108cc    00000062     main_BMP180.obj (.text:main)
+                  0001092e    00000058     rts430x_lc_rd_eabi.lib : div32u.obj (.text)
+                  00010986    0000004a                            : fs_ltof.obj (.text)
+                  000109d0    00000040                            : div32s.obj (.text)
+                  00010a10    0000003e                            : asr32.obj (.text:l_asr_const)
+                  00010a4e    0000003e                            : lsl32.obj (.text:l_lsl_const)
+                  00010a8c    0000003e                            : lsr32.obj (.text:l_lsr_const)
+                  00010aca    00000024                            : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
+                  00010aee    00000022                            : mult32_f5hw.obj (.text)
+                  00010b10    00000010                            : asr32.obj (.text:l_asr)
+                  00010b20    00000010                            : lsl32.obj (.text:l_lsl)
+                  00010b30    00000006                            : isr_trap.obj (.text:__TI_ISR_TRAP)
+                  00010b36    00000004                            : pre_init.obj (.text:_system_pre_init)
+                  00010b3a    00000004                            : exit.obj (.text:abort)
 
 
 LINKER GENERATED COPY TABLES
 
 __TI_cinit_table @ 0000448e records: 1, size/record: 8, table size: 8
-	.bss: load addr=00004484, load size=00000006 bytes, run addr=00001c00, run size=00000022 bytes, compression=zero_init
+	.bss: load addr=00004484, load size=00000006 bytes, run addr=00001c00, run size=00000026 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
@@ -522,10 +529,12 @@ address    name
 000009ce   AESAXIN_L
 000004be   BCD2BIN
 000004bc   BIN2BCD
-00010000   BMP180GetCalVals
-00010336   BMP180GetRawTemp
-000103d0   BMP180GetTemp
-0001072c   C$$EXIT
+0001027e   BMP180GetCalVals
+00010000   BMP180GetPressure
+00010502   BMP180GetRawPressure
+000106a0   BMP180GetRawTemp
+0001073e   BMP180GetTemp
+00010b3a   C$$EXIT
 0000043e   CAPTIO0CTL
 0000043f   CAPTIO0CTL_H
 0000043e   CAPTIO0CTL_L
@@ -1076,7 +1085,7 @@ address    name
 0000448e   __TI_Handler_Table_Limit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
-00010722   __TI_ISR_TRAP
+00010b30   __TI_ISR_TRAP
 00000001   __TI_args_main
 00000001   __TI_exit
 0000ffcc   __TI_int30
@@ -1104,53 +1113,86 @@ UNDEFED    __TI_INITARRAY_Limit
 0000fff8   __TI_int52
 0000fffa   __TI_int53
 0000fffc   __TI_int54
-000106dc   __TI_zero_init
+00010aca   __TI_zero_init
 ffffffff   __binit__
 ffffffff   __c_args__
-00010156   __mspabi_addf
-00010462   __mspabi_divf
-0001065e   __mspabi_divli
-000105bc   __mspabi_divul
-00010614   __mspabi_fltlif
-00010280   __mspabi_mpyf
-00010700   __mspabi_mpyl_f5hw
-0001065e   __mspabi_remli
-000105bc   __mspabi_remul
-000106d6   __mspabi_slll_1
-000106b2   __mspabi_slll_10
-000106ae   __mspabi_slll_11
-000106aa   __mspabi_slll_12
-000106a6   __mspabi_slll_13
-000106a2   __mspabi_slll_14
-0001069e   __mspabi_slll_15
-000106d2   __mspabi_slll_2
-000106ce   __mspabi_slll_3
-000106ca   __mspabi_slll_4
-000106c6   __mspabi_slll_5
-000106c2   __mspabi_slll_6
-000106be   __mspabi_slll_7
-000106ba   __mspabi_slll_8
-000106b6   __mspabi_slll_9
-00010150   __mspabi_subf
-000104f0   _auto_init_hold_wdt
+000103d8   __mspabi_addf
+000107d0   __mspabi_divf
+000109d0   __mspabi_divli
+0001092e   __mspabi_divul
+00010986   __mspabi_fltlif
+000105ea   __mspabi_mpyf
+00010aee   __mspabi_mpyl_f5hw
+000109d0   __mspabi_remli
+0001092e   __mspabi_remul
+00010b20   __mspabi_slll
+00010a86   __mspabi_slll_1
+00010a62   __mspabi_slll_10
+00010a5e   __mspabi_slll_11
+00010a5a   __mspabi_slll_12
+00010a56   __mspabi_slll_13
+00010a52   __mspabi_slll_14
+00010a4e   __mspabi_slll_15
+00010a82   __mspabi_slll_2
+00010a7e   __mspabi_slll_3
+00010a7a   __mspabi_slll_4
+00010a76   __mspabi_slll_5
+00010a72   __mspabi_slll_6
+00010a6e   __mspabi_slll_7
+00010a6a   __mspabi_slll_8
+00010a66   __mspabi_slll_9
+00010b10   __mspabi_sral
+00010a48   __mspabi_sral_1
+00010a24   __mspabi_sral_10
+00010a20   __mspabi_sral_11
+00010a1c   __mspabi_sral_12
+00010a18   __mspabi_sral_13
+00010a14   __mspabi_sral_14
+00010a10   __mspabi_sral_15
+00010a44   __mspabi_sral_2
+00010a40   __mspabi_sral_3
+00010a3c   __mspabi_sral_4
+00010a38   __mspabi_sral_5
+00010a34   __mspabi_sral_6
+00010a30   __mspabi_sral_7
+00010a2c   __mspabi_sral_8
+00010a28   __mspabi_sral_9
+00010ac4   __mspabi_srll_1
+00010aa0   __mspabi_srll_10
+00010a9c   __mspabi_srll_11
+00010a98   __mspabi_srll_12
+00010a94   __mspabi_srll_13
+00010a90   __mspabi_srll_14
+00010a8c   __mspabi_srll_15
+00010ac0   __mspabi_srll_2
+00010abc   __mspabi_srll_3
+00010ab8   __mspabi_srll_4
+00010ab4   __mspabi_srll_5
+00010ab0   __mspabi_srll_6
+00010aac   __mspabi_srll_7
+00010aa8   __mspabi_srll_8
+00010aa4   __mspabi_srll_9
+000103d2   __mspabi_subf
+0001085e   _auto_init_hold_wdt
 00004450   _c_int00
 00004450   _c_int00_noexit
 0000fffe   _reset_vector
 00002360   _stack
-00010728   _system_pre_init
-0001072c   abort
+00010b36   _system_pre_init
+00010b3a   abort
 ffffffff   binit
 00004400   fram_ipe_end
 00004400   fram_ipe_start
 00004400   fram_rx_start
-00001c1e   g_bmpByteCount
-00001c1f   g_bmpByteCountEnd
+00001c22   g_bmpByteCount
+00001c23   g_bmpByteCountEnd
 00001c00   g_bmpCalBytes
-00001c20   g_bmpCalCount
+00001c24   g_bmpCalCount
 00001c16   g_bmpTemp
 00001c1a   g_bmpValBytes
-00001c21   g_sensorCode
-0001055e   main
+00001c1e   g_pressure
+00001c25   g_sensorCode
+000108cc   main
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1960,10 +2002,11 @@ address    name
 00001c00   g_bmpCalBytes
 00001c16   g_bmpTemp
 00001c1a   g_bmpValBytes
-00001c1e   g_bmpByteCount
-00001c1f   g_bmpByteCountEnd
-00001c20   g_bmpCalCount
-00001c21   g_sensorCode
+00001c1e   g_pressure
+00001c22   g_bmpByteCount
+00001c23   g_bmpByteCountEnd
+00001c24   g_bmpCalCount
+00001c25   g_sensorCode
 00002360   _stack
 00002400   __STACK_END
 00004400   USCI_B0_ISR
@@ -2003,45 +2046,79 @@ address    name
 0000fffa   __TI_int53
 0000fffc   __TI_int54
 0000fffe   _reset_vector
-00010000   BMP180GetCalVals
-00010150   __mspabi_subf
-00010156   __mspabi_addf
-00010280   __mspabi_mpyf
-00010336   BMP180GetRawTemp
-000103d0   BMP180GetTemp
-00010462   __mspabi_divf
-000104f0   _auto_init_hold_wdt
-0001055e   main
-000105bc   __mspabi_divul
-000105bc   __mspabi_remul
-00010614   __mspabi_fltlif
-0001065e   __mspabi_divli
-0001065e   __mspabi_remli
-0001069e   __mspabi_slll_15
-000106a2   __mspabi_slll_14
-000106a6   __mspabi_slll_13
-000106aa   __mspabi_slll_12
-000106ae   __mspabi_slll_11
-000106b2   __mspabi_slll_10
-000106b6   __mspabi_slll_9
-000106ba   __mspabi_slll_8
-000106be   __mspabi_slll_7
-000106c2   __mspabi_slll_6
-000106c6   __mspabi_slll_5
-000106ca   __mspabi_slll_4
-000106ce   __mspabi_slll_3
-000106d2   __mspabi_slll_2
-000106d6   __mspabi_slll_1
-000106dc   __TI_zero_init
-00010700   __mspabi_mpyl_f5hw
-00010722   __TI_ISR_TRAP
-00010728   _system_pre_init
-0001072c   C$$EXIT
-0001072c   abort
+00010000   BMP180GetPressure
+0001027e   BMP180GetCalVals
+000103d2   __mspabi_subf
+000103d8   __mspabi_addf
+00010502   BMP180GetRawPressure
+000105ea   __mspabi_mpyf
+000106a0   BMP180GetRawTemp
+0001073e   BMP180GetTemp
+000107d0   __mspabi_divf
+0001085e   _auto_init_hold_wdt
+000108cc   main
+0001092e   __mspabi_divul
+0001092e   __mspabi_remul
+00010986   __mspabi_fltlif
+000109d0   __mspabi_divli
+000109d0   __mspabi_remli
+00010a10   __mspabi_sral_15
+00010a14   __mspabi_sral_14
+00010a18   __mspabi_sral_13
+00010a1c   __mspabi_sral_12
+00010a20   __mspabi_sral_11
+00010a24   __mspabi_sral_10
+00010a28   __mspabi_sral_9
+00010a2c   __mspabi_sral_8
+00010a30   __mspabi_sral_7
+00010a34   __mspabi_sral_6
+00010a38   __mspabi_sral_5
+00010a3c   __mspabi_sral_4
+00010a40   __mspabi_sral_3
+00010a44   __mspabi_sral_2
+00010a48   __mspabi_sral_1
+00010a4e   __mspabi_slll_15
+00010a52   __mspabi_slll_14
+00010a56   __mspabi_slll_13
+00010a5a   __mspabi_slll_12
+00010a5e   __mspabi_slll_11
+00010a62   __mspabi_slll_10
+00010a66   __mspabi_slll_9
+00010a6a   __mspabi_slll_8
+00010a6e   __mspabi_slll_7
+00010a72   __mspabi_slll_6
+00010a76   __mspabi_slll_5
+00010a7a   __mspabi_slll_4
+00010a7e   __mspabi_slll_3
+00010a82   __mspabi_slll_2
+00010a86   __mspabi_slll_1
+00010a8c   __mspabi_srll_15
+00010a90   __mspabi_srll_14
+00010a94   __mspabi_srll_13
+00010a98   __mspabi_srll_12
+00010a9c   __mspabi_srll_11
+00010aa0   __mspabi_srll_10
+00010aa4   __mspabi_srll_9
+00010aa8   __mspabi_srll_8
+00010aac   __mspabi_srll_7
+00010ab0   __mspabi_srll_6
+00010ab4   __mspabi_srll_5
+00010ab8   __mspabi_srll_4
+00010abc   __mspabi_srll_3
+00010ac0   __mspabi_srll_2
+00010ac4   __mspabi_srll_1
+00010aca   __TI_zero_init
+00010aee   __mspabi_mpyl_f5hw
+00010b10   __mspabi_sral
+00010b20   __mspabi_slll
+00010b30   __TI_ISR_TRAP
+00010b36   _system_pre_init
+00010b3a   C$$EXIT
+00010b3a   abort
 ffffffff   __binit__
 ffffffff   __c_args__
 ffffffff   binit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 
-[886 symbols]
+[921 symbols]

@@ -61,6 +61,7 @@ volatile uint8_t g_bmpByteCount;	// Bytes received in interrupt vector
 volatile uint8_t g_bmpByteCountEnd;	// When to stop receiving
 volatile uint8_t g_bmpValBytes[3];	// Bytes received for temperature or pressure
 float g_bmpTemp;
+float g_pressure;
 typedef struct{
 	int16_t  ac1;
 	int16_t  ac2;
@@ -81,6 +82,8 @@ typedef struct{
 extern void BMP180GetCalVals(tBMP180Cals *calInst);
 extern void BMP180GetRawTemp(void);
 extern void BMP180GetTemp(tBMP180Cals *calInst);
+extern void BMP180GetRawPressure(uint8_t oss);
+extern void BMP180GetPressure(uint8_t oss, tBMP180Cals *calInst);
 
 
 #endif /* BMPLIB_H_ */
