@@ -1,4 +1,14 @@
 #include <msp430.h>
+#include "FatFS/ff.h"
+#include "FatFS/diskio.h"
+
+
+FATFS sdVolume;		// FatFs work area needed for each volume
+FIL logfile;		// File object needed for each open file
+uint16_t fp;		// Used for sizeof
+
+uint8_t status = 17;
+
 
 int main(void)
 {
@@ -49,4 +59,32 @@ int main(void)
 
 	  // Enable interrupts
 	  __bis_SR_register(GIE);
+
+
+
+	// Mount the SD Card
+	switch( f_mount(&sdVolume, "", 0) ){
+		case FR_OK:
+			status = 41;
+			break;
+		case FR_INVALID_DRIVE:
+			status = 1;
+			break;
+		case FR_DISK_ERR:
+			status = 2;
+			break;
+		case FR_NOT_READY:
+			status = 3;
+			break;
+		case FR_NO_FILESYSTEM:
+			status = 4;
+			break;
+		default:
+			status = 5;
+			break;
+	}
+
+	status = status + 1;
+
+	  __no_operation();
 }
