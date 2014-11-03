@@ -87,13 +87,13 @@ int main(void)
 	}
 
 	// Initialize result variable
-	__no_operation();
+//	__no_operation();
 	UINT bw;
 
 	// Open & write
 	if(f_open(&logfile, "newfile.txt", FA_WRITE | FA_OPEN_ALWAYS) == FR_OK) {	// Open file - If nonexistent, create
 		f_lseek(&logfile, logfile.fsize);					// Move forward by filesize; logfile.fsize+1 is not needed in this application
-		f_write(&logfile, "Parachutes\n", 11, &bw);				// Append word
+		f_write(&logfile, "Thanks Greeeg!\n", 15, &bw);				// Append word
 		f_close(&logfile);							// Close the file
 		if (bw == 11) {
 			P1OUT |= BIT0;

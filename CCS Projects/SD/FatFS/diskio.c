@@ -168,11 +168,11 @@ static void power_on (void){
 	SPI_OUT |= SPI_SOMI | SPI_SIMO;
 
 	//Initialize USCI_A1 for SPI Master operation
-	UCA1CTLW0 |= UCSWRST;                                    //Put state machine in reset
-	UCA1CTLW0 = UCCKPL | UCMSB | UCMST | UCMODE_0 | UCSYNC;  //3-pin, 8-bit SPI master
+	UCA1CTLW0 = UCSWRST;                                    //Put state machine in reset
+	UCA1CTLW0 |= UCCKPL | UCMSB | UCMST | UCMODE_0 | UCSYNC;  //3-pin, 8-bit SPI master
 	//Clock polarity select - The inactive state is high
 	//MSB first
-	UCA1CTLW0 = UCSWRST | UCSSEL_2;                          //Use SMCLK, keep RESET
+	UCA1CTLW0 |= UCSSEL_2;                          //Use SMCLK, keep RESET
 	UCA1BR0 = 3;                                           //Initial SPI clock must be <400kHz
 	UCA1BR1 = 0;                                            //f_UCxCLK = 1MHz/(3+1) = 250kHz
 	UCA1CTLW0 &= ~UCSWRST;                                   //Release USCI state machine
