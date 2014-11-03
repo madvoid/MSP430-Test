@@ -28,6 +28,9 @@ typedef unsigned int	UINT;
 typedef long			LONG;
 typedef unsigned long	DWORD;
 
+/* Boolean type - THIS WAS NOT ADDED BY ChaN*/
+typedef enum { FALSE = 0, TRUE } BOOL;
+
 #endif
 
 #endif

@@ -9,9 +9,8 @@ CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/msp430_4.3.4
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
 "./main_SD.obj" \
-"./FatFS/HAL_SDCard.obj" \
+"./FatFS/diskio.obj" \
 "./FatFS/ff.obj" \
-"./FatFS/mmc.obj" \
 "../lnk_msp430fr5969.cmd" \
 -l"libc.a" \
 -l"libmath.a" \
@@ -146,8 +145,8 @@ SD.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "main_SD.pp" "FatFS\HAL_SDCard.pp" "FatFS\ff.pp" "FatFS\mmc.pp" 
-	-$(RM) "main_SD.obj" "FatFS\HAL_SDCard.obj" "FatFS\ff.obj" "FatFS\mmc.obj" 
+	-$(RM) "main_SD.pp" "FatFS\diskio.pp" "FatFS\ff.pp" 
+	-$(RM) "main_SD.obj" "FatFS\diskio.obj" "FatFS\ff.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
