@@ -1,4 +1,4 @@
-// main_BMP180_Cals.c
+// main_BMP180.c
 //
 //****************************************************************************************************
 // Author:
@@ -11,7 +11,7 @@
 //
 //
 // Description:
-// 	Interface with BMP180 to get Calibration values
+// 	Interface with BMP180 to get pressure
 //
 // Notes:
 //
@@ -135,5 +135,5 @@ void __attribute__ ((interrupt(TIMER0_B0_VECTOR))) Timer0_B0_ISR (void)
 #endif
 {
 	TB0CTL &= ~MC__STOP;
-	__bic_SR_register_on_exit(LPM3_bits); 	// Exit LPM0
+	__bic_SR_register_on_exit(LPM3_bits); 	// Exit LPM3
 }
