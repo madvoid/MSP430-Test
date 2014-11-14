@@ -44,7 +44,7 @@
 /* -heap   0x0100                                   HEAP AREA SIZE            */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
-/* Version: 1.145                                                             */
+/* Version: 1.153                                                             */
 /*----------------------------------------------------------------------------*/
 
 /****************************************************************************/
@@ -242,14 +242,22 @@ SECTIONS
    #define IPE_MPUIPPUC 0x0020
 
    // Evaluate settings for the control setting of IP Encapsulation
-   #if defined(_IPE_LOCK ) && (defined(_IPE_ASSERTPUC1) && (_IPE_ASSERTPUC1 == 0x08))
-      fram_ipe_enable_value = (IPE_MPUIPENA | IPE_MPUIPPUC | IPE_MPUIPLOCK);
-   #elif defined(_IPE_LOCK )
-      fram_ipe_enable_value = (IPE_MPUIPENA | IPE_MPUIPLOCK);
-   #elif (defined(_IPE_ASSERTPUC1) && (_IPE_ASSERTPUC1 == 0x08))
-      fram_ipe_enable_value = (IPE_MPUIPENA | IPE_MPUIPPUC);
+   #if defined(_IPE_ASSERTPUC1)
+        #if defined(_IPE_LOCK ) && (_IPE_ASSERTPUC1 == 0x08))
+         fram_ipe_enable_value = (IPE_MPUIPENA | IPE_MPUIPPUC |IPE_MPUIPLOCK);
+        #elif defined(_IPE_LOCK )
+         fram_ipe_enable_value = (IPE_MPUIPENA | IPE_MPUIPLOCK);
+      #elif (_IPE_ASSERTPUC1 == 0x08)
+         fram_ipe_enable_value = (IPE_MPUIPENA | IPE_MPUIPPUC);
+      #else
+         fram_ipe_enable_value = (IPE_MPUIPENA);
+      #endif
    #else
-      fram_ipe_enable_value = (IPE_MPUIPENA);
+      #if defined(_IPE_LOCK )
+         fram_ipe_enable_value = (IPE_MPUIPENA | IPE_MPUIPLOCK);
+      #else
+         fram_ipe_enable_value = (IPE_MPUIPENA);
+      #endif
    #endif
 
    // Segment definitions
