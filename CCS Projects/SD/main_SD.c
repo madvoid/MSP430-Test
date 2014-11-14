@@ -8,8 +8,26 @@ FATFS sdVolume;		// FatFs work area needed for each volume
 FIL logfile;		// File object needed for each open file
 uint16_t fp;		// Used for sizeof
 
+uint8_t status = 17;	// Status variable that should change if successful
 
-uint8_t status = 17;
+float testFloat = 17.5678;	// Sample floating point number
+int32_t printValue[2];	// Size 2 array that will hold the split float for printing
+
+
+void FloatToPrint(float floatValue, int32_t splitValue[2]){
+	int32_t i32IntegerPart;
+	int32_t i32FractionPart;
+
+	i32IntegerPart = (int32_t) floatValue;
+	i32FractionPart = (int32_t) (floatValue * 1000.0f);
+	i32FractionPart = i32FractionPart - (1000 * i32IntegerPart);
+	if(i32FractionPart < 0){
+		i32FractionPart *= -1;
+	}
+
+	splitValue[0] = i32IntegerPart;
+	splitValue[1] = i32FractionPart;
+}
 
 
 int main(void)
@@ -90,14 +108,17 @@ int main(void)
 //	__no_operation();
 	UINT bw;
 
+	FloatToPrint(testFloat, printValue);
+
 	// Open & write
 	if(f_open(&logfile, "newfile.txt", FA_WRITE | FA_OPEN_ALWAYS) == FR_OK) {	// Open file - If nonexistent, create
 		f_lseek(&logfile, logfile.fsize);					// Move forward by filesize; logfile.fsize+1 is not needed in this application
 		f_write(&logfile, "Thanks Greeeg!\n", 15, &bw);				// Append word
+//		f_printf(&logfile, "%3d.%3d\n", printValue[0], printValue[1]);
 		f_close(&logfile);							// Close the file
-		if (bw == 11) {
-			P1OUT |= BIT0;
-		}
+//		if (bw == 11) {
+//			P1OUT |= BIT0;
+//		}
 	}
 
 	  __no_operation();

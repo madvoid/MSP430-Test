@@ -15,6 +15,7 @@
 #include <stdbool.h>
 #include <msp430.h>
 #include "diskio.h"		/* FatFs lower layer API */
+#include "../main.h"
 
 
 
