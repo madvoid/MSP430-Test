@@ -47,6 +47,6 @@ CCS projects are compiled and uploaded within CCS, and CCS should handle everyth
 	* **Blink** - Blinks light on and off
 	* **BMP180_Cals** - Gets calibration values from BMP180.
 	* **LPM4** - Enters LPM4 and toggles LED with button
-	* **SD** - SD Card Interface. *Compiles. main.c not written. Not updated for most recent version of FatFS. Currently Not Working!*
+	* **SD** - SD Card Interface - Uses ChaN's FatFS library.
 	* **SHT21** - Interfaces with SHT21
 	* **TimerB_OneShot** - Counts down timer once
