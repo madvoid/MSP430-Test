@@ -54,9 +54,6 @@
 
 
 // Variables -----------------------------------------------------------------------------------------
-static const uint8_t g_bmpCalRegs[11] = {BMP180_REG_CAL_AC1, BMP180_REG_CAL_AC2, BMP180_REG_CAL_AC3, BMP180_REG_CAL_AC4, BMP180_REG_CAL_AC5, BMP180_REG_CAL_AC6, BMP180_REG_CAL_B1, BMP180_REG_CAL_B2, BMP180_REG_CAL_MB, BMP180_REG_CAL_MC, BMP180_REG_CAL_MD};
-volatile uint8_t g_bmpCalBytes[22];		// Received byte storage
-volatile uint8_t g_bmpCalCount;		// Calibration values recieved
 volatile uint8_t g_bmpByteCount;	// Bytes received in interrupt vector
 volatile uint8_t g_bmpByteCountEnd;	// When to stop receiving
 volatile uint8_t g_bmpValBytes[3];	// Bytes received for temperature or pressure

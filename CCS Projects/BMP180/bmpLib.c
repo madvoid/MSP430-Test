@@ -33,12 +33,14 @@
 // Functions -----------------------------------------------------------------------------------------
 void BMP180GetCalVals(tBMP180Cals *calInst){
 
-	// Set sensor code
-	g_sensorCode = SCODE_BMP180_CALS;
+	// Initialize variables
+	static const uint8_t bmpCalRegs[11] = {BMP180_REG_CAL_AC1, BMP180_REG_CAL_AC2, BMP180_REG_CAL_AC3, BMP180_REG_CAL_AC4, BMP180_REG_CAL_AC5, BMP180_REG_CAL_AC6, BMP180_REG_CAL_B1, BMP180_REG_CAL_B2, BMP180_REG_CAL_MB, BMP180_REG_CAL_MC, BMP180_REG_CAL_MD};
+	uint8_t bmpCalBytes[22];		// Received byte storage
+	uint8_t bmpCalCount;		// Calibration values recieved
 
 	// Reset counts
 	g_bmpByteCount = 0;
-	g_bmpCalCount = 0;
+	bmpCalCount = 0;
 	g_bmpByteCountEnd = 2;		// Each send will be responded with 2 bytes
 
 	// Configure USCI_B0 for I2C mode - Sending
@@ -49,41 +51,43 @@ void BMP180GetCalVals(tBMP180Cals *calInst){
 	UCB0TBCNT = g_bmpByteCountEnd;			  // Auto stop count
 	UCB0I2CSA = BMP180_I2C_ADDRESS;           // Slave address
 	UCB0CTL1 &= ~UCSWRST;					  // Clear reset
-	UCB0IE |= UCRXIE;						  // Set rx interrupt
+	UCB0IE &= ~UCRXIE;						  // Set rx interrupt
 	UCB0IE &= ~UCTXIE;						  // Clear tx interrupt
 
-	while(g_bmpCalCount < 11){
+	while(bmpCalCount < 11){
 		UCB0CTLW0 |= UCTXSTT;				// Send start
 		while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt flag
-		UCB0TXBUF = g_bmpCalRegs[g_bmpCalCount];// Send data byte
+		UCB0TXBUF = bmpCalRegs[bmpCalCount];// Send data byte
 		while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt flag
 		UCB0CTLW0 &= ~UCTR;					// Change to receive
 		UCB0CTLW0 |= UCTXSTT;				// Send restart
 		while(UCB0CTLW0 & UCTXSTT);			// Wait for restart
-		__bis_SR_register(LPM0_bits);		// Enter low power mode and wait for bytes
-		g_bmpCalCount++;					// Increment calibration count
-		g_bmpByteCount = 0;					// Reset byte count
+
+		while(!(UCB0IFG & UCRXIFG0));		// Wait for RX interrupt flag
+		bmpCalBytes[2*bmpCalCount] = UCB0RXBUF;	// Read rxbuffer
+		while(!(UCB0IFG & UCRXIFG0));		// Wait for RX interrupt flag
+		bmpCalBytes[2*bmpCalCount+1] = UCB0RXBUF;	// Read rxbuffer
+		while(UCB0CTLW0 & UCTXSTP);		// Wait for stop
+
+		bmpCalCount++;					// Increment calibration count
 		UCB0CTLW0 |= UCTR;					// tx mode
 	}
 
-	calInst->ac1 = (int16_t) ( (g_bmpCalBytes[0] << 8) | g_bmpCalBytes[1] );
-	calInst->ac2 = (int16_t) ( (g_bmpCalBytes[2] << 8) | g_bmpCalBytes[3] );
-	calInst->ac3 = (int16_t) ( (g_bmpCalBytes[4] << 8) | g_bmpCalBytes[5] );
-	calInst->ac4 = (uint16_t)( (g_bmpCalBytes[6] << 8) | g_bmpCalBytes[7] );
-	calInst->ac5 = (uint16_t)( (g_bmpCalBytes[8] << 8) | g_bmpCalBytes[9] );
-	calInst->ac6 = (uint16_t)( (g_bmpCalBytes[10] << 8) | g_bmpCalBytes[11] );
-	calInst->b1 =  (int16_t) ( (g_bmpCalBytes[12] << 8) | g_bmpCalBytes[13] );
-	calInst->b2 =  (int16_t) ( (g_bmpCalBytes[14] << 8) | g_bmpCalBytes[15] );
-	calInst->mb =  (int16_t) ( (g_bmpCalBytes[16] << 8) | g_bmpCalBytes[17] );
-	calInst->mc =  (int16_t) ( (g_bmpCalBytes[18] << 8) | g_bmpCalBytes[19] );
-	calInst->md =  (int16_t) ( (g_bmpCalBytes[20] << 8) | g_bmpCalBytes[21] );
+	calInst->ac1 = (int16_t) ( (bmpCalBytes[0] << 8) | bmpCalBytes[1] );
+	calInst->ac2 = (int16_t) ( (bmpCalBytes[2] << 8) | bmpCalBytes[3] );
+	calInst->ac3 = (int16_t) ( (bmpCalBytes[4] << 8) | bmpCalBytes[5] );
+	calInst->ac4 = (uint16_t)( (bmpCalBytes[6] << 8) | bmpCalBytes[7] );
+	calInst->ac5 = (uint16_t)( (bmpCalBytes[8] << 8) | bmpCalBytes[9] );
+	calInst->ac6 = (uint16_t)( (bmpCalBytes[10] << 8) | bmpCalBytes[11] );
+	calInst->b1 =  (int16_t) ( (bmpCalBytes[12] << 8) | bmpCalBytes[13] );
+	calInst->b2 =  (int16_t) ( (bmpCalBytes[14] << 8) | bmpCalBytes[15] );
+	calInst->mb =  (int16_t) ( (bmpCalBytes[16] << 8) | bmpCalBytes[17] );
+	calInst->mc =  (int16_t) ( (bmpCalBytes[18] << 8) | bmpCalBytes[19] );
+	calInst->md =  (int16_t) ( (bmpCalBytes[20] << 8) | bmpCalBytes[21] );
 }
 
 
 void BMP180GetRawTemp(void){
-
-	// Set sensor code
-	g_sensorCode = SCODE_BMP180_VALS;
 
 	// Reset counts
 	g_bmpByteCount = 0;
@@ -148,9 +152,6 @@ void BMP180GetTemp(tBMP180Cals *calInst){
 
 void BMP180GetRawPressure(uint8_t oss){
 
-	// Set sensor code
-	g_sensorCode = SCODE_BMP180_VALS;
-
 	// Reset counts
 	g_bmpByteCount = 0;
 	g_bmpByteCountEnd = 0x03;		// Each send will be responded with 2 bytes
@@ -179,19 +180,19 @@ void BMP180GetRawPressure(uint8_t oss){
 	// Setup timer based on oversampling setting
 	switch(oss){
 	case 0:
-		TB0CCR0 = 175;					// (175 ticks) * (1 second / 32768 ticks) = 5.3 ms > 4.5 ms required
+		TB0CCR0 = 375;					// (375 ticks) * (1 second / 32768 ticks) = 11.4 ms > 4.5 ms required
 		break;
 	case 1:
-		TB0CCR0 = 250;					// (250 ticks) * (1 second / 32768 ticks) = 7.6 ms > 7.5 ms required
+		TB0CCR0 = 450;					// (450 ticks) * (1 second / 32768 ticks) = 13.7 ms > 7.5 ms required
 		break;
 	case 2:
-		TB0CCR0 = 450;					// (450 ticks) * (1 second / 32768 ticks) = 13.7 ms > 13.5 ms required
+		TB0CCR0 = 650;					// (650 ticks) * (1 second / 32768 ticks) = 19.8 ms > 13.5 ms required
 		break;
 	case 3:
-		TB0CCR0 = 850;					// (850 ticks) * (1 second / 32768 ticks) = 25.9 ms > 25.5 ms required
+		TB0CCR0 = 1050;					// (1050 ticks) * (1 second / 32768 ticks) = 32.0 ms > 25.5 ms required
 		break;
 	default:
-		TB0CCR0 = 850;					// Safe default value
+		TB0CCR0 = 1050;					// Safe default value
 		break;
 	}
 

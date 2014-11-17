@@ -40,7 +40,6 @@
 // Main ----------------------------------------------------------------------------------------------
 int main(void) {
 	  WDTCTL = WDTPW | WDTHOLD;       // Stop WDT
-	  g_sensorCode = 0x00;
 
 	  // Configure GPIO
 	  P1OUT &= ~BIT0;                           // Clear P1.0 output latch
@@ -107,11 +106,7 @@ void __attribute__ ((interrupt(USCI_B0_VECTOR))) USCI_B0_ISR (void)
     case USCI_I2C_UCRXIFG1:  break;         // Vector 18: RXIFG1
     case USCI_I2C_UCTXIFG1:  break;         // Vector 20: TXIFG1
     case USCI_I2C_UCRXIFG0:  		        // Vector 22: RXIFG0
-    	if(g_sensorCode == SCODE_BMP180_CALS){
-    		g_bmpCalBytes[2*g_bmpCalCount+g_bmpByteCount] = UCB0RXBUF;	// Read rxbuffer
-    	}else if(g_sensorCode == SCODE_BMP180_VALS){
-    		g_bmpValBytes[g_bmpByteCount] = UCB0RXBUF;
-    	}
+    	g_bmpValBytes[g_bmpByteCount] = UCB0RXBUF;
     	g_bmpByteCount++;						// Increment byte count
     	if(g_bmpByteCount == g_bmpByteCountEnd){
     		__bic_SR_register_on_exit(LPM0_bits); 	// Exit LPM0
