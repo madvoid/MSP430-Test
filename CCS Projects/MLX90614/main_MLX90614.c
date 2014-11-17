@@ -51,8 +51,7 @@
 
 
 // Global --------------------------------------------------------------------------------------------
-volatile uint8_t g_mlxValBytes[3];		// Recieved value byte storage
-volatile uint8_t g_mlxRxCount;			// Recieved value count
+uint8_t g_mlxValBytes[3];		// Recieved value byte storage
 float g_objectTemp;						// Temperature of object in field of view
 float g_ambientTemp;					// Ambient temperature
 
@@ -85,6 +84,8 @@ int main(void) {
 	// Enable interrupts
 	__bis_SR_register(GIE);
 
+
+
 	// Configure USCI_B0 for I2 mode - Sending
 	UCB0CTLW0 |= UCSWRST;		// Software reset enabled
 	UCB0CTLW0 |= UCMODE_3 | UCMST | UCSYNC | UCTR | UCSSEL__SMCLK; // I2C mode, master, sync, sending, SMCLK
@@ -93,11 +94,8 @@ int main(void) {
 	UCB0TBCNT = 0x03;			// Auto stop after 3 bytes
 	UCB0I2CSA = MLX90614_I2C_ADDRESS;	// I2C Address
 	UCB0CTL1 &= ~UCSWRST;		// Clear reset
-	UCB0IE |= UCRXIE;			// Set rx interrupt
+	UCB0IE &= ~UCRXIE;			// Ensure Interrupts off
 	UCB0IE &= ~UCTXIE;
-
-	// Reset receive count
-	g_mlxRxCount = 0;
 
 	// Send object temperature read command
 	UCB0CTL1 |= UCTXSTT;			// Send start
@@ -107,15 +105,23 @@ int main(void) {
 	UCB0CTLW0 &= ~UCTR;				// Change to receive
 	UCB0CTLW0 |= UCTXSTT;			// Send restart
 	while(UCB0CTLW0 & UCTXSTT);		// Wait for restart
-	__bis_SR_register(LPM0_bits);	// Enter low power mode and wait for bytes
 
+	// Receive Bytes
+	while(!(UCB0IFG & UCRXIFG0));	// Wait for RX interrupt flag
+	g_mlxValBytes[0] = UCB0RXBUF;	// 0th byte
+	while(!(UCB0IFG & UCRXIFG0));	// Wait for RX interrupt flag
+	g_mlxValBytes[1] = UCB0RXBUF;	// 1st byte
+	while(!(UCB0IFG & UCRXIFG0));	// Wait for RX interrupt flag
+	g_mlxValBytes[2] = UCB0RXBUF;	// 2nd byte
+	while(UCB0CTLW0 & UCTXSTP);		// Wait for stop
+
+	// Calculate temperature
 	g_objectTemp = 0.0;
 	uint16_t tempVals = ( ((uint16_t) g_mlxValBytes[1]) << 8 ) | ( (uint16_t) g_mlxValBytes[0] );
 	g_objectTemp = ((float) tempVals) * 0.02 - 273.15;
 
-//	__delay_cycles(100000);
 
-	g_mlxRxCount = 0;				// Reset receive count
+
 	// Configure USCI_B0 for I2 mode - Sending
 	UCB0CTLW0 |= UCSWRST;		// Software reset enabled
 	UCB0CTLW0 |= UCMODE_3 | UCMST | UCSYNC | UCTR | UCSSEL__SMCLK; // I2C mode, master, sync, sending, SMCLK
@@ -124,7 +130,7 @@ int main(void) {
 	UCB0TBCNT = 0x03;			// Auto stop after 3 bytes
 	UCB0I2CSA = MLX90614_I2C_ADDRESS;	// I2C Address
 	UCB0CTL1 &= ~UCSWRST;		// Clear reset
-	UCB0IE |= UCRXIE;			// Set rx interrupt
+	UCB0IE &= ~UCRXIE;			// Ensure TX/RX interrupt not set
 	UCB0IE &= ~UCTXIE;
 
 	// Send ambient temperature read command
@@ -135,7 +141,15 @@ int main(void) {
 	UCB0CTLW0 &= ~UCTR;				// Change to receive
 	UCB0CTLW0 |= UCTXSTT;			// Send restart
 	while(UCB0CTLW0 & UCTXSTT);		// Wait for restart
-	__bis_SR_register(LPM0_bits);	// Enter low power mode and wait for bytes
+
+	// Receive Bytes
+	while(!(UCB0IFG & UCRXIFG0));	// Wait for RX interrupt flag
+	g_mlxValBytes[0] = UCB0RXBUF;	// 0th byte
+	while(!(UCB0IFG & UCRXIFG0));	// Wait for RX interrupt flag
+	g_mlxValBytes[1] = UCB0RXBUF;	// 1st byte
+	while(!(UCB0IFG & UCRXIFG0));	// Wait for RX interrupt flag
+	g_mlxValBytes[2] = UCB0RXBUF;	// 2nd byte
+	while(UCB0CTLW0 & UCTXSTP);		// Wait for stop
 
 	g_ambientTemp = 0.0;
 	tempVals = 0;
@@ -145,57 +159,3 @@ int main(void) {
 	__no_operation();
 }
 
-
-
-
-// Interrupts ----------------------------------------------------------------------------------------
-
-// EUSCI_B I2C Interrupt
-#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
-#pragma vector = USCI_B0_VECTOR
-__interrupt void USCI_B0_ISR(void)
-#elif defined(__GNUC__)
-void __attribute__ ((interrupt(USCI_B0_VECTOR))) USCI_B0_ISR (void)
-#else
-#error Compiler not supported!
-#endif
-{
-  switch(__even_in_range(UCB0IV, USCI_I2C_UCBIT9IFG)){
-    case USCI_NONE:          break;         // Vector 0: No interrupts
-    case USCI_I2C_UCALIFG:   break;         // Vector 2: ALIFG
-    case USCI_I2C_UCNACKIFG: break;         // Vector 4: NACKIFG
-    case USCI_I2C_UCSTTIFG:  break;         // Vector 6: STTIFG
-    case USCI_I2C_UCSTPIFG:  break;         // Vector 8: STPIFG
-    case USCI_I2C_UCRXIFG3:  break;         // Vector 10: RXIFG3
-    case USCI_I2C_UCTXIFG3:  break;         // Vector 12: TXIFG3
-    case USCI_I2C_UCRXIFG2:  break;         // Vector 14: RXIFG2
-    case USCI_I2C_UCTXIFG2:  break;         // Vector 16: TXIFG2
-    case USCI_I2C_UCRXIFG1:  break;         // Vector 18: RXIFG1
-    case USCI_I2C_UCTXIFG1:  break;         // Vector 20: TXIFG1
-    case USCI_I2C_UCRXIFG0:  		        // Vector 22: RXIFG0
-    	g_mlxValBytes[g_mlxRxCount] = UCB0RXBUF;
-    	g_mlxRxCount++;
-    	if(g_mlxRxCount == 3){
-    		__bic_SR_register_on_exit(LPM0_bits);
-    	}
-    	break;
-    case USCI_I2C_UCTXIFG0:                 // Vector 24: TXIFG0
-    	break;
-    default: break;
-  }
-}
-
-
-// Timer B1 interrupt service routine
-#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
-#pragma vector = TIMER0_B0_VECTOR
-__interrupt void Timer0_B0_ISR(void)
-#elif defined(__GNUC__)
-void __attribute__ ((interrupt(TIMER0_B0_VECTOR))) Timer0_B0_ISR (void)
-#else
-#error Compiler not supported!
-#endif
-{
-	TB0CTL &= ~MC__STOP;
-	__bic_SR_register_on_exit(LPM3_bits); 	// Exit LPM3
-}
