@@ -33,6 +33,8 @@
 #define SHT21_TEMP_NOBLOCK 0xF3
 #define SHT21_HUM_NOBLOCK  0xF5
 
+#define SCODE_SHT21_VALS 0x01
+
 
 // Variables -----------------------------------------------------------------------------------------
 volatile unsigned char g_shtRxArr[2];

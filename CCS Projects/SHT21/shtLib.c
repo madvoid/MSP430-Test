@@ -60,7 +60,7 @@ void SHT21ReadTemperature(void){
 
 	// Setup timer for 85ms measurement delay
 	TB0CCTL0 = CCIE;                          // TBCCR0 interrupt enabled
-	TB0CCR0 = 2800;							// (2800 ticks) * (1 second / 32768 ticks) = 85.4 ms > 85 ms required
+	TB0CCR0 = 3200;							// (2800 ticks) * (1 second / 32768 ticks) = 97.6 ms > 85 ms required
 	TB0CTL = TBSSEL__ACLK | MC__UP;           // ACLK, up mode
 
 	__bis_SR_register(LPM3_bits);       // Enter LPM3 w/ interrupt
@@ -106,7 +106,7 @@ void SHT21ReadHumidity(void){
 
 	// Setup timer for 29ms
 	TB0CCTL0 = CCIE;                          // TBCCR0 interrupt enabled
-	TB0CCR0 = 960;							// (960 ticks) * (1 second / 32768 ticks) = 29.3 ms > 29 ms required
+	TB0CCR0 = 1300;							// (960 ticks) * (1 second / 32768 ticks) = 39.7 ms > 29 ms required
 	TB0CTL = TBSSEL__ACLK | MC__UP;           // ACLK, up mode
 
 	__bis_SR_register(LPM3_bits);       // Enter LPM3 w/ interrupt
