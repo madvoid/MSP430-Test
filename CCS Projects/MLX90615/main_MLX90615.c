@@ -84,6 +84,7 @@ int main(void) {
 
 	// Get object and ambient temperature
 	MLX90615GetObjTemp();
+//	MLX90615Sleep();		// Programming works. TODO: Does current consumption actually drop?
 	MLX90615GetAmbTemp();
 
 	__no_operation();

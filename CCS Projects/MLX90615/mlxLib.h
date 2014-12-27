@@ -41,7 +41,7 @@
 #define MLX90615_CONFIG 0x12
 #define MLX90615_EMISS 0x13
 // Enter sleep command
-#define MLX90625_ENTER_SLEEP 0xC6	// 0b1100,0110
+#define MLX90615_ENTER_SLEEP 0xC6	// 0b1100,0110
 
 
 
@@ -55,5 +55,6 @@ float g_ambientTemp;					// Ambient temperature
 // Functions -----------------------------------------------------------------------------------------
 extern void MLX90615GetObjTemp(void);
 extern void MLX90615GetAmbTemp(void);
+extern void MLX90615Sleep(void);
 
 #endif /* MLXLIB_H_ */
