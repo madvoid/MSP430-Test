@@ -9,6 +9,7 @@ CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/msp430_4.3.5
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
 "./main_MLX90615.obj" \
+"./mlxLib.obj" \
 "../lnk_msp430fr5969.cmd" \
 -l"libc.a" \
 -l"libmath.a" \
@@ -141,8 +142,8 @@ MLX90615.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "main_MLX90615.pp" 
-	-$(RM) "main_MLX90615.obj" 
+	-$(RM) "main_MLX90615.pp" "mlxLib.pp" 
+	-$(RM) "main_MLX90615.obj" "mlxLib.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

@@ -1,4 +1,4 @@
-// main_MLX90615.c
+// mlxLib.h
 //
 //****************************************************************************************************
 // Author:
@@ -8,7 +8,7 @@
 //	Inspired by Adafruit MLX90614 Library
 //
 // Requirements:
-//
+//	mlxLib.c
 //
 // Description:
 // 	Interface with MLX90615
@@ -19,12 +19,11 @@
 //	Make more durable, timeouts, testing, etc.
 //****************************************************************************************************
 
-
+#ifndef MLXLIB_H_
+#define MLXLIB_H_
 
 // Includes ------------------------------------------------------------------------------------------
 #include <stdint.h>
-#include <msp430.h>
-#include "mlxLib.h"
 
 
 
@@ -46,46 +45,15 @@
 
 
 
-
-
 // Global --------------------------------------------------------------------------------------------
-uint8_t g_mlxValBytes[3];		// Recieved value byte storage
+uint8_t g_mlxValBytes[3];				// Recieved value byte storage
 float g_objectTemp;						// Temperature of object in field of view
 float g_ambientTemp;					// Ambient temperature
 
 
 
-// Main ----------------------------------------------------------------------------------------------
-int main(void) {
-	WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
-	
-	// Configure GPIO
-	P1OUT &= ~BIT0;                           // Clear P1.0 output latch
-	P1DIR |= BIT0;                            // For LED
-	P1SEL1 |= BIT6 | BIT7;                    // I2C pins
-	PJSEL0 |= BIT4 | BIT5;					// Set J.4 & J.5 to accept crystal input for ACLK
+// Functions -----------------------------------------------------------------------------------------
+extern void MLX90615GetObjTemp(void);
+extern void MLX90615GetAmbTemp(void);
 
-	// Disable the GPIO power-on default high-impedance mode to activate
-	// previously configured port settings
-	PM5CTL0 &= ~LOCKLPM5;
-
-	// Clock setup
-	CSCTL0_H = CSKEY >> 8;                    // Unlock CS registers
-	CSCTL1 = DCOFSEL_0;                       // Set DCO to 1MHz
-	CSCTL2 = SELA__LFXTCLK | SELS__DCOCLK | SELM__DCOCLK; // Set ACLK = LFXTCLK; MCLK = DCO
-	CSCTL3 = DIVA__1 | DIVS__1 | DIVM__1;     // Set all dividers to 1
-	CSCTL4 &= ~LFXTOFF;						// Turn on LFXT
-
-	// Lock CS registers - Why isn't PUC created?
-	CSCTL0_H = 0;
-
-	// Enable interrupts
-	__bis_SR_register(GIE);
-
-	// Get object and ambient temperature
-	MLX90615GetObjTemp();
-	MLX90615GetAmbTemp();
-
-	__no_operation();
-}
-
+#endif /* MLXLIB_H_ */

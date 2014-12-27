@@ -1,1 +1,1 @@
-"./main_MLX90615.obj" "../lnk_msp430fr5969.cmd" -l"libc.a" -l"libmath.a" 
+"./main_MLX90615.obj" "./mlxLib.obj" "../lnk_msp430fr5969.cmd" -l"libc.a" -l"libmath.a" 
