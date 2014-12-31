@@ -1,0 +1,1 @@
+"./main_DS3231.obj" "../lnk_msp430fr5969.cmd" -l"libc.a" -l"libmath.a" 
