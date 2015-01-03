@@ -7,27 +7,21 @@ CMD_SRCS += \
 ../lnk_msp430fr5969.cmd 
 
 C_SRCS += \
-../dsLib.c \
-../main_DS3231.c 
+../main_DS3231_TimeSet.c 
 
 OBJS += \
-./dsLib.obj \
-./main_DS3231.obj 
+./main_DS3231_TimeSet.obj 
 
 C_DEPS += \
-./dsLib.pp \
-./main_DS3231.pp 
+./main_DS3231_TimeSet.pp 
 
 C_DEPS__QUOTED += \
-"dsLib.pp" \
-"main_DS3231.pp" 
+"main_DS3231_TimeSet.pp" 
 
 OBJS__QUOTED += \
-"dsLib.obj" \
-"main_DS3231.obj" 
+"main_DS3231_TimeSet.obj" 
 
 C_SRCS__QUOTED += \
-"../dsLib.c" \
-"../main_DS3231.c" 
+"../main_DS3231_TimeSet.c" 
 
 

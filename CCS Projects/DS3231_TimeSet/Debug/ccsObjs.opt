@@ -1,0 +1,1 @@
+"./main_DS3231_TimeSet.obj" "../lnk_msp430fr5969.cmd" -l"libc.a" -l"libmath.a" 
