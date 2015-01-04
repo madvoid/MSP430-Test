@@ -65,7 +65,7 @@ void SHT21ReadTemperature(void){
 	while(!(UCB0IFG & UCRXIFG));			// Wait for receive
 	g_shtRxArr[0] = UCB0RXBUF;				// Read first byte
 	while(!(UCB0IFG & UCRXIFG));			// Wait for second byte
-	g_shtRxArr[1] = UCB0RXBUF;				// Wait for receive
+	g_shtRxArr[1] = UCB0RXBUF;				// Read second byte
 	while(UCB0CTLW0 & UCTXSTP);				// Wait for stop
 
 	uint16_t tempRaw = ((uint16_t)g_shtRxArr[0] << 8) | (uint16_t)(g_shtRxArr[1]);
@@ -112,7 +112,7 @@ void SHT21ReadHumidity(void){
 	while(!(UCB0IFG & UCRXIFG));			// Wait for receive
 	g_shtRxArr[0] = UCB0RXBUF;				// Read first byte
 	while(!(UCB0IFG & UCRXIFG));			// Wait for second byte
-	g_shtRxArr[1] = UCB0RXBUF;				// Wait for receive
+	g_shtRxArr[1] = UCB0RXBUF;				// Read second byte
 	while(UCB0CTLW0 & UCTXSTP);				// Wait for stop
 
 

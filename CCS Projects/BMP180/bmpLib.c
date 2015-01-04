@@ -39,7 +39,6 @@ void BMP180GetCalVals(tBMP180Cals *calInst){
 	uint8_t bmpCalCount;		// Calibration values recieved
 
 	// Reset counts
-	g_bmpByteCount = 0;
 	bmpCalCount = 0;
 	g_bmpByteCountEnd = 2;		// Each send will be responded with 2 bytes
 
@@ -90,7 +89,6 @@ void BMP180GetCalVals(tBMP180Cals *calInst){
 void BMP180GetRawTemp(void){
 
 	// Reset counts
-	g_bmpByteCount = 0;
 	g_bmpByteCountEnd = 0x02;		// Each send will be responded with 2 bytes
 
 	// Configure USCI_B0 for I2C mode - Sending
@@ -101,7 +99,7 @@ void BMP180GetRawTemp(void){
 	UCB0TBCNT = g_bmpByteCountEnd;			  // Auto stop count
 	UCB0I2CSA = BMP180_I2C_ADDRESS;           // Slave address
 	UCB0CTL1 &= ~UCSWRST;					  // Clear reset
-	UCB0IE |= UCRXIE;						  // Set rx interrupt
+	UCB0IE &= ~UCRXIE;						  // Set rx interrupt
 	UCB0IE &= ~UCTXIE;						  // Clear tx interrupt
 
 	// Start transmission
@@ -127,7 +125,11 @@ void BMP180GetRawTemp(void){
 	UCB0CTLW0 &= ~UCTR;					// Change to receive
 	UCB0CTLW0 |= UCTXSTT;				// Send restart
 	while(UCB0CTLW0 & UCTXSTT);			// Wait for restart
-	__bis_SR_register(LPM0_bits);		// Enter low power mode and wait for bytes
+	while(!(UCB0IFG & UCRXIFG));		// Wait for receive
+	g_bmpValBytes[0] = UCB0RXBUF;		// Receive first byte
+	while(!(UCB0IFG & UCRXIFG));		// Wait for receive
+	g_bmpValBytes[1] = UCB0RXBUF;		// Receive second byte
+	while(UCB0CTLW0 & UCTXSTP);			// Wait for stop
 }
 
 
@@ -153,7 +155,6 @@ void BMP180GetTemp(tBMP180Cals *calInst){
 void BMP180GetRawPressure(uint8_t oss){
 
 	// Reset counts
-	g_bmpByteCount = 0;
 	g_bmpByteCountEnd = 0x03;		// Each send will be responded with 2 bytes
 
 	// Configure USCI_B0 for I2C mode - Sending
@@ -164,7 +165,7 @@ void BMP180GetRawPressure(uint8_t oss){
 	UCB0TBCNT = g_bmpByteCountEnd;			  // Auto stop count
 	UCB0I2CSA = BMP180_I2C_ADDRESS;           // Slave address
 	UCB0CTL1 &= ~UCSWRST;					  // Clear reset
-	UCB0IE |= UCRXIE;						  // Set rx interrupt
+	UCB0IE &= ~UCRXIE;						  // Set rx interrupt
 	UCB0IE &= ~UCTXIE;						  // Clear tx interrupt
 
 	// Start transmission
@@ -210,7 +211,13 @@ void BMP180GetRawPressure(uint8_t oss){
 	UCB0CTLW0 &= ~UCTR;					// Change to receive
 	UCB0CTLW0 |= UCTXSTT;				// Send restart
 	while(UCB0CTLW0 & UCTXSTT);			// Wait for restart
-	__bis_SR_register(LPM0_bits);		// Enter low power mode and wait for bytes
+	while(!(UCB0IFG & UCRXIFG));		// Wait for receive
+	g_bmpValBytes[0] = UCB0RXBUF;		// Receive first byte
+	while(!(UCB0IFG & UCRXIFG));		// Wait for receive
+	g_bmpValBytes[1] = UCB0RXBUF;		// Receive second byte
+	while(!(UCB0IFG & UCRXIFG));		// Wait for receive
+	g_bmpValBytes[2] = UCB0RXBUF;		// Receive third byte
+	while(UCB0CTLW0 & UCTXSTP);			// Wait for stop
 }
 
 

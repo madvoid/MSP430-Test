@@ -54,7 +54,6 @@
 
 
 // Variables -----------------------------------------------------------------------------------------
-volatile uint8_t g_bmpByteCount;	// Bytes received in interrupt vector
 volatile uint8_t g_bmpByteCountEnd;	// When to stop receiving
 volatile uint8_t g_bmpValBytes[3];	// Bytes received for temperature or pressure
 float g_bmpTemp;
