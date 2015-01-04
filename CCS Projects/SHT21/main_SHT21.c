@@ -55,9 +55,6 @@ int main(void) {
 	  // Enable interrupts
 	  __bis_SR_register(GIE);
 
-	  // Initialize SHT21 Variables
-	  SHT21Init();
-
 	  // Read Temperature
 	  SHT21ReadTemperature();
 
@@ -73,43 +70,6 @@ int main(void) {
 
 // Interrupts ----------------------------------------------------------------------------------------
 
-// EUSCI_B I2C Interrupt
-#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
-#pragma vector = USCI_B0_VECTOR
-__interrupt void USCI_B0_ISR(void)
-#elif defined(__GNUC__)
-void __attribute__ ((interrupt(USCI_B0_VECTOR))) USCI_B0_ISR (void)
-#else
-#error Compiler not supported!
-#endif
-{
-  switch(__even_in_range(UCB0IV, USCI_I2C_UCBIT9IFG))
-  {
-    case USCI_NONE:          break;         // Vector 0: No interrupts
-    case USCI_I2C_UCALIFG:   break;         // Vector 2: ALIFG
-    case USCI_I2C_UCNACKIFG: break;         // Vector 4: NACKIFG
-    case USCI_I2C_UCSTTIFG:  break;         // Vector 6: STTIFG
-    case USCI_I2C_UCSTPIFG:  break;         // Vector 8: STPIFG
-    case USCI_I2C_UCRXIFG3:  break;         // Vector 10: RXIFG3
-    case USCI_I2C_UCTXIFG3:  break;         // Vector 12: TXIFG3
-    case USCI_I2C_UCRXIFG2:  break;         // Vector 14: RXIFG2
-    case USCI_I2C_UCTXIFG2:  break;         // Vector 16: TXIFG2
-    case USCI_I2C_UCRXIFG1:  break;         // Vector 18: RXIFG1
-    case USCI_I2C_UCTXIFG1:  break;         // Vector 20: TXIFG1
-    case USCI_I2C_UCRXIFG0:  		        // Vector 22: RXIFG0
-		g_shtRxArr[g_shtRxCount] = UCB0RXBUF;	// Read byte from SHT21
-		g_shtRxCount++;
-    	if(g_shtRxCount == 2){
-    		__bic_SR_register_on_exit(LPM0_bits); 	// Exit LPM0
-    	}
-    	break;
-    case USCI_I2C_UCTXIFG0:                 // Vector 24: TXIFG0
-    	break;
-    default: break;
-  }
-}
-
-
 // Timer B1 interrupt service routine
 #if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
 #pragma vector = TIMER0_B0_VECTOR
@@ -121,6 +81,6 @@ void __attribute__ ((interrupt(TIMER0_B0_VECTOR))) Timer0_B0_ISR (void)
 #endif
 {
 	TB0CTL &= ~MC__STOP;
-	__bic_SR_register_on_exit(LPM3_bits); 	// Exit LPM0
+	__bic_SR_register_on_exit(LPM3_bits); 	// Exit LPM3
 }
 

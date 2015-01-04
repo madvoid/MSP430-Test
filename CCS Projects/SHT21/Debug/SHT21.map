@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker PC v4.3.4                      
 ******************************************************************************
->> Linked Sun Nov 16 22:03:08 2014
+>> Linked Sat Jan 03 19:41:47 2015
 
 OUTPUT FILE NAME:   <SHT21.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 0000442a
+ENTRY POINT SYMBOL: "_c_int00"  address: 00004400
 
 
 MEMORY CONFIGURATION
@@ -18,8 +18,8 @@ MEMORY CONFIGURATION
   INFOC                 00001880   00000080  00000000  00000080  RWIX
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
-  RAM                   00001c00   00000800  000000ab  00000755  RWIX
-  FRAM                  00004400   0000bb80  00000064  0000bb1c  RWIX
+  RAM                   00001c00   00000800  000000aa  00000756  RWIX
+  FRAM                  00004400   0000bb80  0000003a  0000bb46  RWIX
   JTAGSIGNATURE         0000ff80   00000004  00000004  00000000  RWIX  ffff 
   BSLSIGNATURE          0000ff84   00000004  00000004  00000000  RWIX  ffff 
   IPESIGNATURE          0000ff88   00000008  00000008  00000000  RWIX  ffff 
@@ -79,7 +79,7 @@ MEMORY CONFIGURATION
   INT53                 0000fffa   00000002  00000002  00000000  RWIX
   INT54                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FRAM2                 00010000   00004000  0000047e  00003b82  RWIX
+  FRAM2                 00010000   00004000  000004a8  00003b58  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -90,11 +90,10 @@ section   page    origin      length       input sections
 .init_array 
 *          0    00004400    00000000     UNINITIALIZED
 
-.bss       0    00001c00    0000000b     UNINITIALIZED
+.bss       0    00001c00    0000000a     UNINITIALIZED
                   00001c00    00000004     (.common:g_hum)
                   00001c04    00000004     (.common:g_temp)
                   00001c08    00000002     (.common:g_shtRxArr)
-                  00001c0a    00000001     (.common:g_shtRxCount)
 
 .stack     0    00002360    000000a0     UNINITIALIZED
                   00002360    00000004     rts430x_lc_rd_eabi.lib : boot.obj (.stack)
@@ -108,10 +107,9 @@ section   page    origin      length       input sections
 .sysmem    0    00004400    00000000     UNINITIALIZED
 
 .text:_isr 
-*          0    00004400    00000052     
-                  00004400    0000002a     main_SHT21.obj (.text:_isr:USCI_B0_ISR)
-                  0000442a    0000001a     rts430x_lc_rd_eabi.lib : boot.obj (.text:_isr:_c_int00_noexit)
-                  00004444    0000000e     main_SHT21.obj (.text:_isr:Timer0_B0_ISR)
+*          0    00004400    00000028     
+                  00004400    0000001a     rts430x_lc_rd_eabi.lib : boot.obj (.text:_isr:_c_int00_noexit)
+                  0000441a    0000000e     main_SHT21.obj (.text:_isr:Timer0_B0_ISR)
 
 .ipestruct 
 *          0    00004400    00000000     UNINITIALIZED
@@ -121,10 +119,10 @@ section   page    origin      length       input sections
 .ipe:_isr 
 *          0    00004400    00000000     UNINITIALIZED
 
-.cinit     0    00004452    00000012     
-                  00004452    00000006     (.cinit..bss.load) [load image, compression = zero_init]
-                  00004458    00000004     (__TI_handler_table)
-                  0000445c    00000008     (__TI_cinit_table)
+.cinit     0    00004428    00000012     
+                  00004428    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  0000442e    00000004     (__TI_handler_table)
+                  00004432    00000008     (__TI_cinit_table)
 
 $fill000   0    0000ff80    00000004     
                   0000ff80    00000004     --HOLE-- [fill = ffff]
@@ -195,7 +193,7 @@ ADC12      0    0000ffec    00000002
                   0000ffec    00000002     rts430x_lc_rd_eabi.lib : int46.obj (.int46)
 
 USCI_B0    0    0000ffee    00000002     
-                  0000ffee    00000002     main_SHT21.obj (.int47)
+                  0000ffee    00000002     rts430x_lc_rd_eabi.lib : int47.obj (.int47)
 
 USCI_A0    0    0000fff0    00000002     
                   0000fff0    00000002     rts430x_lc_rd_eabi.lib : int48.obj (.int48)
@@ -223,30 +221,29 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.obj (.reset)
 
-.text      0    00010000    0000047e     
+.text      0    00010000    000004a8     
                   00010000    00000130     rts430x_lc_rd_eabi.lib : fs_add.obj (.text)
-                  00010130    000000b8     shtLib.obj (.text:SHT21ReadTemperature)
-                  000101e8    000000b6     rts430x_lc_rd_eabi.lib : fs_mpy.obj (.text)
-                  0001029e    000000b4     shtLib.obj (.text:SHT21ReadHumidity)
-                  00010352    0000006e     rts430x_lc_rd_eabi.lib : autoinit.obj (.text:_auto_init_hold_wdt)
-                  000103c0    00000052     main_SHT21.obj (.text:main)
-                  00010412    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
-                  00010436    00000024                            : fs_utof.obj (.text)
-                  0001045a    00000016     shtLib.obj (.text:SHT21Init)
-                  00010470    00000006     rts430x_lc_rd_eabi.lib : isr_trap.obj (.text:__TI_ISR_TRAP)
-                  00010476    00000004                            : pre_init.obj (.text:_system_pre_init)
-                  0001047a    00000004                            : exit.obj (.text:abort)
+                  00010130    000000da     shtLib.obj (.text:SHT21ReadTemperature)
+                  0001020a    000000d6     shtLib.obj (.text:SHT21ReadHumidity)
+                  000102e0    000000b6     rts430x_lc_rd_eabi.lib : fs_mpy.obj (.text)
+                  00010396    0000006e                            : autoinit.obj (.text:_auto_init_hold_wdt)
+                  00010404    0000004e     main_SHT21.obj (.text:main)
+                  00010452    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
+                  00010476    00000024                            : fs_utof.obj (.text)
+                  0001049a    00000006                            : isr_trap.obj (.text:__TI_ISR_TRAP)
+                  000104a0    00000004                            : pre_init.obj (.text:_system_pre_init)
+                  000104a4    00000004                            : exit.obj (.text:abort)
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 0000445c records: 1, size/record: 8, table size: 8
-	.bss: load addr=00004452, load size=00000006 bytes, run addr=00001c00, run size=0000000b bytes, compression=zero_init
+__TI_cinit_table @ 00004432 records: 1, size/record: 8, table size: 8
+	.bss: load addr=00004428, load size=00000006 bytes, run addr=00001c00, run size=0000000a bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00004458 records: 1, size/record: 4, table size: 4
+__TI_handler_table @ 0000442e records: 1, size/record: 4, table size: 4
 	index: 0, handler: __TI_zero_init
 
 
@@ -511,7 +508,7 @@ address    name
 000009ce   AESAXIN_L
 000004be   BCD2BIN
 000004bc   BIN2BCD
-0001047a   C$$EXIT
+000104a4   C$$EXIT
 0000043e   CAPTIO0CTL
 0000043f   CAPTIO0CTL_H
 0000043e   CAPTIO0CTL_L
@@ -573,24 +570,30 @@ address    name
 00000511   DMA0CTL_H
 00000510   DMA0CTL_L
 00000516   DMA0DA
+00000518   DMA0DAH
 00000516   DMA0DAL
 00000512   DMA0SA
+00000514   DMA0SAH
 00000512   DMA0SAL
 0000051a   DMA0SZ
 00000520   DMA1CTL
 00000521   DMA1CTL_H
 00000520   DMA1CTL_L
 00000526   DMA1DA
+00000528   DMA1DAH
 00000526   DMA1DAL
 00000522   DMA1SA
+00000524   DMA1SAH
 00000522   DMA1SAL
 0000052a   DMA1SZ
 00000530   DMA2CTL
 00000531   DMA2CTL_H
 00000530   DMA2CTL_L
 00000536   DMA2DA
+00000538   DMA2DAH
 00000536   DMA2DAL
 00000532   DMA2SA
+00000534   DMA2SAH
 00000532   DMA2SAL
 0000053a   DMA2SZ
 00000500   DMACTL0
@@ -850,18 +853,11 @@ address    name
 00000104   SFRRPCR
 00000105   SFRRPCR_H
 00000104   SFRRPCR_L
-0001045a   SHT21Init
-0001029e   SHT21ReadHumidity
+0001020a   SHT21ReadHumidity
 00010130   SHT21ReadTemperature
 000004ce   SUMEXT
 000004cf   SUMEXT_H
 000004ce   SUMEXT_L
-00000198   SYSBERRIV
-00000199   SYSBERRIV_H
-00000198   SYSBERRIV_L
-00000182   SYSBSLC
-00000183   SYSBSLC_H
-00000182   SYSBSLC_L
 00000180   SYSCTL
 00000181   SYSCTL_H
 00000180   SYSCTL_L
@@ -943,7 +939,7 @@ address    name
 000003e0   TB0EX0
 000003ee   TB0IV
 000003d0   TB0R
-00004444   Timer0_B0_ISR
+0000441a   Timer0_B0_ISR
 000005d0   UCA0ABCTL
 000005c6   UCA0BRW
 000005c7   UCA0BRW_H
@@ -1053,19 +1049,18 @@ address    name
 0000064e   UCB0TXBUF
 0000064f   UCB0TXBUF_H
 0000064e   UCB0TXBUF_L
-00004400   USCI_B0_ISR
 0000015c   WDTCTL
 0000015d   WDTCTL_H
 0000015c   WDTCTL_L
 00002400   __STACK_END
 000000a0   __STACK_SIZE
-0000445c   __TI_CINIT_Base
-00004464   __TI_CINIT_Limit
-00004458   __TI_Handler_Table_Base
-0000445c   __TI_Handler_Table_Limit
+00004432   __TI_CINIT_Base
+0000443a   __TI_CINIT_Limit
+0000442e   __TI_Handler_Table_Base
+00004432   __TI_Handler_Table_Limit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
-00010470   __TI_ISR_TRAP
+0001049a   __TI_ISR_TRAP
 00000001   __TI_args_main
 00000001   __TI_exit
 0000ffcc   __TI_int30
@@ -1093,29 +1088,28 @@ UNDEFED    __TI_INITARRAY_Limit
 0000fff8   __TI_int52
 0000fffa   __TI_int53
 0000fffc   __TI_int54
-00010412   __TI_zero_init
+00010452   __TI_zero_init
 ffffffff   __binit__
 ffffffff   __c_args__
 00010006   __mspabi_addf
-00010436   __mspabi_fltuf
-000101e8   __mspabi_mpyf
+00010476   __mspabi_fltuf
+000102e0   __mspabi_mpyf
 00010000   __mspabi_subf
-00010352   _auto_init_hold_wdt
-0000442a   _c_int00
-0000442a   _c_int00_noexit
+00010396   _auto_init_hold_wdt
+00004400   _c_int00
+00004400   _c_int00_noexit
 0000fffe   _reset_vector
 00002360   _stack
-00010476   _system_pre_init
-0001047a   abort
+000104a0   _system_pre_init
+000104a4   abort
 ffffffff   binit
 00004400   fram_ipe_end
 00004400   fram_ipe_start
 00004400   fram_rx_start
 00001c00   g_hum
 00001c08   g_shtRxArr
-00001c0a   g_shtRxCount
 00001c04   g_temp
-000103c0   main
+00010404   main
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1191,9 +1185,6 @@ address    name
 00000180   SYSCTL
 00000180   SYSCTL_L
 00000181   SYSCTL_H
-00000182   SYSBSLC
-00000182   SYSBSLC_L
-00000183   SYSBSLC_H
 00000186   SYSJMBC
 00000186   SYSJMBC_L
 00000187   SYSJMBC_H
@@ -1209,9 +1200,6 @@ address    name
 0000018e   SYSJMBO1
 0000018e   SYSJMBO1_L
 0000018f   SYSJMBO1_H
-00000198   SYSBERRIV
-00000198   SYSBERRIV_L
-00000199   SYSBERRIV_H
 0000019a   SYSUNIV
 0000019a   SYSUNIV_L
 0000019b   SYSUNIV_H
@@ -1497,24 +1485,30 @@ address    name
 00000511   DMA0CTL_H
 00000512   DMA0SA
 00000512   DMA0SAL
+00000514   DMA0SAH
 00000516   DMA0DA
 00000516   DMA0DAL
+00000518   DMA0DAH
 0000051a   DMA0SZ
 00000520   DMA1CTL
 00000520   DMA1CTL_L
 00000521   DMA1CTL_H
 00000522   DMA1SA
 00000522   DMA1SAL
+00000524   DMA1SAH
 00000526   DMA1DA
 00000526   DMA1DAL
+00000528   DMA1DAH
 0000052a   DMA1SZ
 00000530   DMA2CTL
 00000530   DMA2CTL_L
 00000531   DMA2CTL_H
 00000532   DMA2SA
 00000532   DMA2SAL
+00000534   DMA2SAH
 00000536   DMA2DA
 00000536   DMA2DAL
+00000538   DMA2DAH
 0000053a   DMA2SZ
 000005a0   MPUCTL0
 000005a0   MPUCTL0_L
@@ -1925,20 +1919,18 @@ address    name
 00001c00   g_hum
 00001c04   g_temp
 00001c08   g_shtRxArr
-00001c0a   g_shtRxCount
 00002360   _stack
 00002400   __STACK_END
-00004400   USCI_B0_ISR
+00004400   _c_int00
+00004400   _c_int00_noexit
 00004400   fram_ipe_end
 00004400   fram_ipe_start
 00004400   fram_rx_start
-0000442a   _c_int00
-0000442a   _c_int00_noexit
-00004444   Timer0_B0_ISR
-00004458   __TI_Handler_Table_Base
-0000445c   __TI_CINIT_Base
-0000445c   __TI_Handler_Table_Limit
-00004464   __TI_CINIT_Limit
+0000441a   Timer0_B0_ISR
+0000442e   __TI_Handler_Table_Base
+00004432   __TI_CINIT_Base
+00004432   __TI_Handler_Table_Limit
+0000443a   __TI_CINIT_Limit
 0000ffcc   __TI_int30
 0000ffce   __TI_int31
 0000ffd0   __TI_int32
@@ -1968,21 +1960,20 @@ address    name
 00010000   __mspabi_subf
 00010006   __mspabi_addf
 00010130   SHT21ReadTemperature
-000101e8   __mspabi_mpyf
-0001029e   SHT21ReadHumidity
-00010352   _auto_init_hold_wdt
-000103c0   main
-00010412   __TI_zero_init
-00010436   __mspabi_fltuf
-0001045a   SHT21Init
-00010470   __TI_ISR_TRAP
-00010476   _system_pre_init
-0001047a   C$$EXIT
-0001047a   abort
+0001020a   SHT21ReadHumidity
+000102e0   __mspabi_mpyf
+00010396   _auto_init_hold_wdt
+00010404   main
+00010452   __TI_zero_init
+00010476   __mspabi_fltuf
+0001049a   __TI_ISR_TRAP
+000104a0   _system_pre_init
+000104a4   C$$EXIT
+000104a4   abort
 ffffffff   __binit__
 ffffffff   __c_args__
 ffffffff   binit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 
-[862 symbols]
+[859 symbols]

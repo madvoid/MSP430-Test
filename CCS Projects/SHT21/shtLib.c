@@ -28,15 +28,9 @@
 
 
 // Functions -----------------------------------------------------------------------------------------
-void SHT21Init(void){
-	g_temp = 0.0f;
-	g_hum = 0.0f;
-	g_shtRxCount = 0;
-}
-
-
-
 void SHT21ReadTemperature(void){
+
+	g_temp = 0.0f;
 
 	// Configure USCI_B0 for I2C mode - Sending
 	UCB0CTLW0 |= UCSWRST;                     // Software reset enabled
@@ -47,7 +41,7 @@ void SHT21ReadTemperature(void){
 	UCB0I2CSA = SHT21_I2C_ADDRESS;            // Slave address
 	UCB0CTL1 &= ~UCSWRST;					  // Clear reset
 	UCB0IE &= ~UCTXIE;						  // Ensure tx interrupt off
-	UCB0IE |= UCRXIE0;						  // Ensure rx interrupt on
+	UCB0IE &= ~UCRXIE;						  // Ensure rx interrupt off
 
 	// Send temperature read command
 	UCB0CTL1 |= UCTXSTT;					// Send start
@@ -65,15 +59,14 @@ void SHT21ReadTemperature(void){
 
 	__bis_SR_register(LPM3_bits);       // Enter LPM3 w/ interrupt
 
-	// Reset receive count
-	g_shtRxCount = 0;
-
 	// Start transfer
 	UCB0CTL1 |= UCTXSTT;
-
-	// Delay during transfer
-	while (UCB0CTLW0 & UCTXSTT);            // Ensure start condition got sent
-	__bis_SR_register(LPM0_bits);       	// Enter LPM0 w/ interrupts
+	while(UCB0CTLW0 & UCTXSTT);             // Wait for ready
+	while(!(UCB0IFG & UCRXIFG));			// Wait for receive
+	g_shtRxArr[0] = UCB0RXBUF;				// Read first byte
+	while(!(UCB0IFG & UCRXIFG));			// Wait for second byte
+	g_shtRxArr[1] = UCB0RXBUF;				// Wait for receive
+	while(UCB0CTLW0 & UCTXSTP);				// Wait for stop
 
 	uint16_t tempRaw = ((uint16_t)g_shtRxArr[0] << 8) | (uint16_t)(g_shtRxArr[1]);
 	g_temp = (float)(tempRaw & 0xFFFC);
@@ -84,16 +77,18 @@ void SHT21ReadTemperature(void){
 
 void SHT21ReadHumidity(void){
 
+	g_hum = 0.0f;
+
 	// Configure USCI_B0 for I2C mode - Sending
 	UCB0CTLW0 |= UCSWRST;                     // Software reset enabled
 	UCB0CTLW0 |= UCMODE_3 | UCMST | UCSYNC | UCTR | UCSSEL__SMCLK;   // I2C mode, Master mode, sync, Sending, SMCLK
 	UCB0BRW = 0x0004;                         // baudrate = SMCLK / 4
 	UCB0CTLW1 |= UCASTP_2;                    // Automatic stop generated after UCB0TBCNT is reached
-	UCB0TBCNT = 0x02;                         // number of bytes to be sent
+	UCB0TBCNT = 0x02;                         // number of bytes to be sent/received
 	UCB0I2CSA = SHT21_I2C_ADDRESS;            // Slave address
 	UCB0CTL1 &= ~UCSWRST;					  // Clear reset
 	UCB0IE &= ~UCTXIE;						  // Ensure tx interrupt off
-	UCB0IE |= UCRXIE0;						  // Ensure rx interrupt on
+	UCB0IE &= ~UCRXIE;						  // Ensure rx interrupt off
 
 	// Send humidity read command
 	UCB0CTL1 |= UCTXSTT;					// Send start
@@ -111,15 +106,15 @@ void SHT21ReadHumidity(void){
 
 	__bis_SR_register(LPM3_bits);       // Enter LPM3 w/ interrupt
 
-	// Reset receive count
-	g_shtRxCount = 0;
-
 	// Start transfer
 	UCB0CTL1 |= UCTXSTT;
+	while(UCB0CTLW0 & UCTXSTT);             // Wait for ready
+	while(!(UCB0IFG & UCRXIFG));			// Wait for receive
+	g_shtRxArr[0] = UCB0RXBUF;				// Read first byte
+	while(!(UCB0IFG & UCRXIFG));			// Wait for second byte
+	g_shtRxArr[1] = UCB0RXBUF;				// Wait for receive
+	while(UCB0CTLW0 & UCTXSTP);				// Wait for stop
 
-	// Delay during transfer
-	while (UCB0CTLW0 & UCTXSTT);            // Ensure start condition got sent
-	__bis_SR_register(LPM0_bits);       // Enter LPM0 w/ interrupts
 
 	uint16_t humRaw = ((uint16_t)g_shtRxArr[0] << 8) | (uint16_t)(g_shtRxArr[1]);
 	g_hum = (float)(humRaw & 0xFFFC);

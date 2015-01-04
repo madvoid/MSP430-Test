@@ -38,13 +38,11 @@
 
 // Variables -----------------------------------------------------------------------------------------
 volatile unsigned char g_shtRxArr[2];
-volatile uint8_t g_shtRxCount;
 float g_temp;
 float g_hum;
 
 
 // Functions -----------------------------------------------------------------------------------------
-extern void SHT21Init(void);
 extern void SHT21ReadTemperature(void);
 extern void SHT21ReadHumidity(void);
 
