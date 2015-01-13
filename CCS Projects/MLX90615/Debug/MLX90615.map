@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v4.3.5                      
 ******************************************************************************
->> Linked Fri Dec 26 20:53:16 2014
+>> Linked Tue Jan 13 00:34:05 2015
 
 OUTPUT FILE NAME:   <MLX90615.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00004400
@@ -79,7 +79,7 @@ MEMORY CONFIGURATION
   INT53                 0000fffa   00000002  00000002  00000000  RWIX
   INT54                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FRAM2                 00010000   00004000  000010a2  00002f5e  RWIX
+  FRAM2                 00010000   00004000  00001050  00002fb0  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -221,7 +221,7 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.obj (.reset)
 
-.text      0    00010000    000010a2     
+.text      0    00010000    00001050     
                   00010000    000002e4     rts430x_lc_rd_eabi.lib : frcmpyd.obj (.text:__TI_frcmpyd)
                   000102e4    000002d8                            : addd.obj (.text:__mspabi_addd)
                   000105bc    00000282                            : mpyd.obj (.text:__mspabi_mpyd)
@@ -232,20 +232,19 @@ SYSNMI     0    0000fffc    00000002
                   00010d16    0000008c                            : cvtdf.obj (.text:__mspabi_cvtdf)
                   00010da2    0000006e                            : autoinit.obj (.text:_auto_init_hold_wdt)
                   00010e10    00000064                            : cvtfd.obj (.text:__mspabi_cvtfd)
-                  00010e74    00000052     main_MLX90615.obj (.text:main)
-                  00010ec6    0000004e     mlxLib.obj (.text:MLX90615Sleep)
-                  00010f14    0000003e     rts430x_lc_rd_eabi.lib : asr32.obj (.text:l_asr_const)
-                  00010f52    0000003e                            : lsl32.obj (.text:l_lsl_const)
-                  00010f90    0000003e                            : lsr32.obj (.text:l_lsr_const)
-                  00010fce    00000032                            : subd.obj (.text:__mspabi_subd)
-                  00011000    00000024                            : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
-                  00011024    00000024                            : fs_utof.obj (.text)
-                  00011048    00000022                            : mult32_f5hw.obj (.text)
-                  0001106a    00000010                            : asr32.obj (.text:l_asr)
-                  0001107a    00000010                            : lsl32.obj (.text:l_lsl)
-                  0001108a    00000010                            : lsr32.obj (.text:l_lsr)
-                  0001109a    00000004                            : pre_init.obj (.text:_system_pre_init)
-                  0001109e    00000004                            : exit.obj (.text:abort)
+                  00010e74    0000004e     main_MLX90615.obj (.text:main)
+                  00010ec2    0000003e     rts430x_lc_rd_eabi.lib : asr32.obj (.text:l_asr_const)
+                  00010f00    0000003e                            : lsl32.obj (.text:l_lsl_const)
+                  00010f3e    0000003e                            : lsr32.obj (.text:l_lsr_const)
+                  00010f7c    00000032                            : subd.obj (.text:__mspabi_subd)
+                  00010fae    00000024                            : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
+                  00010fd2    00000024                            : fs_utof.obj (.text)
+                  00010ff6    00000022                            : mult32_f5hw.obj (.text)
+                  00011018    00000010                            : asr32.obj (.text:l_asr)
+                  00011028    00000010                            : lsl32.obj (.text:l_lsl)
+                  00011038    00000010                            : lsr32.obj (.text:l_lsr)
+                  00011048    00000004                            : pre_init.obj (.text:_system_pre_init)
+                  0001104c    00000004                            : exit.obj (.text:abort)
 
 
 LINKER GENERATED COPY TABLES
@@ -521,7 +520,7 @@ address    name
 000009ce   AESAXIN_L
 000004be   BCD2BIN
 000004bc   BIN2BCD
-0001109e   C$$EXIT
+0001104c   C$$EXIT
 0000043e   CAPTIO0CTL
 0000043f   CAPTIO0CTL_H
 0000043e   CAPTIO0CTL_L
@@ -656,7 +655,6 @@ address    name
 000004c4   MAC_L
 00010a90   MLX90615GetAmbTemp
 00010b7a   MLX90615GetObjTemp
-00010ec6   MLX90615Sleep
 000005a0   MPUCTL0
 000005a1   MPUCTL0_H
 000005a0   MPUCTL0_L
@@ -1104,71 +1102,71 @@ UNDEFED    __TI_INITARRAY_Limit
 0000fffa   __TI_int53
 0000fffc   __TI_int54
 00010c64   __TI_renormd
-00011000   __TI_zero_init
+00010fae   __TI_zero_init
 ffffffff   __binit__
 ffffffff   __c_args__
 000102e4   __mspabi_addd
 00010d16   __mspabi_cvtdf
 00010e10   __mspabi_cvtfd
-00011024   __mspabi_fltuf
+00010fd2   __mspabi_fltuf
 000105bc   __mspabi_mpyd
-00011048   __mspabi_mpyl_f5hw
-0001107a   __mspabi_slll
-00010f8a   __mspabi_slll_1
-00010f66   __mspabi_slll_10
-00010f62   __mspabi_slll_11
-00010f5e   __mspabi_slll_12
-00010f5a   __mspabi_slll_13
-00010f56   __mspabi_slll_14
-00010f52   __mspabi_slll_15
-00010f86   __mspabi_slll_2
-00010f82   __mspabi_slll_3
-00010f7e   __mspabi_slll_4
-00010f7a   __mspabi_slll_5
-00010f76   __mspabi_slll_6
-00010f72   __mspabi_slll_7
-00010f6e   __mspabi_slll_8
-00010f6a   __mspabi_slll_9
-0001106a   __mspabi_sral
-00010f4c   __mspabi_sral_1
-00010f28   __mspabi_sral_10
-00010f24   __mspabi_sral_11
-00010f20   __mspabi_sral_12
-00010f1c   __mspabi_sral_13
-00010f18   __mspabi_sral_14
-00010f14   __mspabi_sral_15
-00010f48   __mspabi_sral_2
-00010f44   __mspabi_sral_3
-00010f40   __mspabi_sral_4
-00010f3c   __mspabi_sral_5
-00010f38   __mspabi_sral_6
-00010f34   __mspabi_sral_7
-00010f30   __mspabi_sral_8
-00010f2c   __mspabi_sral_9
-0001108a   __mspabi_srll
-00010fc8   __mspabi_srll_1
-00010fa4   __mspabi_srll_10
-00010fa0   __mspabi_srll_11
-00010f9c   __mspabi_srll_12
-00010f98   __mspabi_srll_13
-00010f94   __mspabi_srll_14
-00010f90   __mspabi_srll_15
-00010fc4   __mspabi_srll_2
-00010fc0   __mspabi_srll_3
-00010fbc   __mspabi_srll_4
-00010fb8   __mspabi_srll_5
-00010fb4   __mspabi_srll_6
-00010fb0   __mspabi_srll_7
-00010fac   __mspabi_srll_8
-00010fa8   __mspabi_srll_9
-00010fce   __mspabi_subd
+00010ff6   __mspabi_mpyl_f5hw
+00011028   __mspabi_slll
+00010f38   __mspabi_slll_1
+00010f14   __mspabi_slll_10
+00010f10   __mspabi_slll_11
+00010f0c   __mspabi_slll_12
+00010f08   __mspabi_slll_13
+00010f04   __mspabi_slll_14
+00010f00   __mspabi_slll_15
+00010f34   __mspabi_slll_2
+00010f30   __mspabi_slll_3
+00010f2c   __mspabi_slll_4
+00010f28   __mspabi_slll_5
+00010f24   __mspabi_slll_6
+00010f20   __mspabi_slll_7
+00010f1c   __mspabi_slll_8
+00010f18   __mspabi_slll_9
+00011018   __mspabi_sral
+00010efa   __mspabi_sral_1
+00010ed6   __mspabi_sral_10
+00010ed2   __mspabi_sral_11
+00010ece   __mspabi_sral_12
+00010eca   __mspabi_sral_13
+00010ec6   __mspabi_sral_14
+00010ec2   __mspabi_sral_15
+00010ef6   __mspabi_sral_2
+00010ef2   __mspabi_sral_3
+00010eee   __mspabi_sral_4
+00010eea   __mspabi_sral_5
+00010ee6   __mspabi_sral_6
+00010ee2   __mspabi_sral_7
+00010ede   __mspabi_sral_8
+00010eda   __mspabi_sral_9
+00011038   __mspabi_srll
+00010f76   __mspabi_srll_1
+00010f52   __mspabi_srll_10
+00010f4e   __mspabi_srll_11
+00010f4a   __mspabi_srll_12
+00010f46   __mspabi_srll_13
+00010f42   __mspabi_srll_14
+00010f3e   __mspabi_srll_15
+00010f72   __mspabi_srll_2
+00010f6e   __mspabi_srll_3
+00010f6a   __mspabi_srll_4
+00010f66   __mspabi_srll_5
+00010f62   __mspabi_srll_6
+00010f5e   __mspabi_srll_7
+00010f5a   __mspabi_srll_8
+00010f56   __mspabi_srll_9
+00010f7c   __mspabi_subd
 00010da2   _auto_init_hold_wdt
 00004400   _c_int00
 00004400   _c_int00_noexit
 0000fffe   _reset_vector
 00002360   _stack
-0001109a   _system_pre_init
-0001109e   abort
+00011048   _system_pre_init
+0001104c   abort
 ffffffff   binit
 00004400   fram_ipe_end
 00004400   fram_ipe_start
@@ -2035,66 +2033,65 @@ address    name
 00010da2   _auto_init_hold_wdt
 00010e10   __mspabi_cvtfd
 00010e74   main
-00010ec6   MLX90615Sleep
-00010f14   __mspabi_sral_15
-00010f18   __mspabi_sral_14
-00010f1c   __mspabi_sral_13
-00010f20   __mspabi_sral_12
-00010f24   __mspabi_sral_11
-00010f28   __mspabi_sral_10
-00010f2c   __mspabi_sral_9
-00010f30   __mspabi_sral_8
-00010f34   __mspabi_sral_7
-00010f38   __mspabi_sral_6
-00010f3c   __mspabi_sral_5
-00010f40   __mspabi_sral_4
-00010f44   __mspabi_sral_3
-00010f48   __mspabi_sral_2
-00010f4c   __mspabi_sral_1
-00010f52   __mspabi_slll_15
-00010f56   __mspabi_slll_14
-00010f5a   __mspabi_slll_13
-00010f5e   __mspabi_slll_12
-00010f62   __mspabi_slll_11
-00010f66   __mspabi_slll_10
-00010f6a   __mspabi_slll_9
-00010f6e   __mspabi_slll_8
-00010f72   __mspabi_slll_7
-00010f76   __mspabi_slll_6
-00010f7a   __mspabi_slll_5
-00010f7e   __mspabi_slll_4
-00010f82   __mspabi_slll_3
-00010f86   __mspabi_slll_2
-00010f8a   __mspabi_slll_1
-00010f90   __mspabi_srll_15
-00010f94   __mspabi_srll_14
-00010f98   __mspabi_srll_13
-00010f9c   __mspabi_srll_12
-00010fa0   __mspabi_srll_11
-00010fa4   __mspabi_srll_10
-00010fa8   __mspabi_srll_9
-00010fac   __mspabi_srll_8
-00010fb0   __mspabi_srll_7
-00010fb4   __mspabi_srll_6
-00010fb8   __mspabi_srll_5
-00010fbc   __mspabi_srll_4
-00010fc0   __mspabi_srll_3
-00010fc4   __mspabi_srll_2
-00010fc8   __mspabi_srll_1
-00010fce   __mspabi_subd
-00011000   __TI_zero_init
-00011024   __mspabi_fltuf
-00011048   __mspabi_mpyl_f5hw
-0001106a   __mspabi_sral
-0001107a   __mspabi_slll
-0001108a   __mspabi_srll
-0001109a   _system_pre_init
-0001109e   C$$EXIT
-0001109e   abort
+00010ec2   __mspabi_sral_15
+00010ec6   __mspabi_sral_14
+00010eca   __mspabi_sral_13
+00010ece   __mspabi_sral_12
+00010ed2   __mspabi_sral_11
+00010ed6   __mspabi_sral_10
+00010eda   __mspabi_sral_9
+00010ede   __mspabi_sral_8
+00010ee2   __mspabi_sral_7
+00010ee6   __mspabi_sral_6
+00010eea   __mspabi_sral_5
+00010eee   __mspabi_sral_4
+00010ef2   __mspabi_sral_3
+00010ef6   __mspabi_sral_2
+00010efa   __mspabi_sral_1
+00010f00   __mspabi_slll_15
+00010f04   __mspabi_slll_14
+00010f08   __mspabi_slll_13
+00010f0c   __mspabi_slll_12
+00010f10   __mspabi_slll_11
+00010f14   __mspabi_slll_10
+00010f18   __mspabi_slll_9
+00010f1c   __mspabi_slll_8
+00010f20   __mspabi_slll_7
+00010f24   __mspabi_slll_6
+00010f28   __mspabi_slll_5
+00010f2c   __mspabi_slll_4
+00010f30   __mspabi_slll_3
+00010f34   __mspabi_slll_2
+00010f38   __mspabi_slll_1
+00010f3e   __mspabi_srll_15
+00010f42   __mspabi_srll_14
+00010f46   __mspabi_srll_13
+00010f4a   __mspabi_srll_12
+00010f4e   __mspabi_srll_11
+00010f52   __mspabi_srll_10
+00010f56   __mspabi_srll_9
+00010f5a   __mspabi_srll_8
+00010f5e   __mspabi_srll_7
+00010f62   __mspabi_srll_6
+00010f66   __mspabi_srll_5
+00010f6a   __mspabi_srll_4
+00010f6e   __mspabi_srll_3
+00010f72   __mspabi_srll_2
+00010f76   __mspabi_srll_1
+00010f7c   __mspabi_subd
+00010fae   __TI_zero_init
+00010fd2   __mspabi_fltuf
+00010ff6   __mspabi_mpyl_f5hw
+00011018   __mspabi_sral
+00011028   __mspabi_slll
+00011038   __mspabi_srll
+00011048   _system_pre_init
+0001104c   C$$EXIT
+0001104c   abort
 ffffffff   __binit__
 ffffffff   __c_args__
 ffffffff   binit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 
-[913 symbols]
+[912 symbols]
