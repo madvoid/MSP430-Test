@@ -37,6 +37,7 @@ uint8_t bin2bcd (uint8_t val){
 
 void DS3231GetCurrentTime(void){
     int i;	// For loop counter
+    uint8_t timeMask[] = {0x7F,0x7F,0x3F,0x7,0x3F,0x1F,0xFF}; //{seconds, minutes, hours, day, date, month, year}
 
 	// Configure USCI_B0 for I2C mode - Sending
 	UCB0CTLW0 |= UCSWRST;                     // Software reset enabled
@@ -65,7 +66,9 @@ void DS3231GetCurrentTime(void){
 	}
 	while(UCB0CTLW0 & UCTXSTP);	// Wait for stop
 
+	__no_operation();
+
 	for(i = 0; i < DS3231_TIME_LENGTH; i++){
-		g_getTimeArr[i] = bcd2bin(g_getTimeArr[i]);
+		g_getTimeArr[i] = bcd2bin(g_getTimeArr[i] & timeMask[i]);
 	}
 }

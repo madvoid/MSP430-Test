@@ -52,7 +52,9 @@
 
 
 // Global --------------------------------------------------------------------------------------------
-uint8_t g_setTimeArr[] = {00,57,02,7,3,01,15};	//{seconds, minutes, hours, day, date, month, year}
+// Do NOT use leading zeros!
+uint8_t g_setTimeArr[] = {0,34,21,5,15,1,15};	//{seconds, minutes, hours, day, date, month, year}
+const uint8_t g_timeMask[] = {0x7F,0x7F,0x3F,0x7,0x3F,0x9F,0xFF}; //{seconds, minutes, hours, day, date, month, year}
 uint8_t g_rtcTimeLength = 7;
 
 
@@ -100,7 +102,7 @@ int main(void) {
 
 	int i;	// For loop counter
 	for(i = 0; i < g_rtcTimeLength; i++){
-		g_setTimeArr[i] = bin2bcd(g_setTimeArr[i]);
+		g_setTimeArr[i] = bin2bcd(g_setTimeArr[i] & g_timeMask[i]);
 	}
 
 	while(P1IN & BIT1);		// Wait for switch

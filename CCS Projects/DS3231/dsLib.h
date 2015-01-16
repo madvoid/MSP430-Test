@@ -60,6 +60,7 @@ uint8_t g_getTimeArr[7];	//{seconds, minutes, hours, day, date, month, year}
 
 
 
+
 // Functions -----------------------------------------------------------------------------------------
 extern uint8_t bcd2bin (uint8_t val);
 extern uint8_t bin2bcd (uint8_t val);

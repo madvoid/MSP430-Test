@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v4.3.5                      
 ******************************************************************************
->> Linked Sat Jan 03 02:51:19 2015
+>> Linked Thu Jan 15 20:33:29 2015
 
 OUTPUT FILE NAME:   <DS3231.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00004400
@@ -19,7 +19,7 @@ MEMORY CONFIGURATION
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
   RAM                   00001c00   00000800  000000a8  00000758  RWIX
-  FRAM                  00004400   0000bb80  00000032  0000bb4e  RWIX
+  FRAM                  00004400   0000bb80  00000039  0000bb47  RWIX
   JTAGSIGNATURE         0000ff80   00000004  00000004  00000000  RWIX  ffff 
   BSLSIGNATURE          0000ff84   00000004  00000004  00000000  RWIX  ffff 
   IPESIGNATURE          0000ff88   00000008  00000008  00000000  RWIX  ffff 
@@ -79,7 +79,7 @@ MEMORY CONFIGURATION
   INT53                 0000fffa   00000002  00000002  00000000  RWIX
   INT54                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FRAM2                 00010000   00004000  000001b4  00003e4c  RWIX
+  FRAM2                 00010000   00004000  000001ec  00003e14  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -117,10 +117,13 @@ section   page    origin      length       input sections
 .ipe:_isr 
 *          0    00004400    00000000     UNINITIALIZED
 
-.cinit     0    00004420    00000012     
-                  00004420    00000006     (.cinit..bss.load) [load image, compression = zero_init]
-                  00004426    00000004     (__TI_handler_table)
-                  0000442a    00000008     (__TI_cinit_table)
+.const     0    00004420    00000007     
+                  00004420    00000007     dsLib.obj (.const:.string:$P$T0$1)
+
+.cinit     0    00004428    00000012     
+                  00004428    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  0000442e    00000004     (__TI_handler_table)
+                  00004432    00000008     (__TI_cinit_table)
 
 $fill000   0    0000ff80    00000004     
                   0000ff80    00000004     --HOLE-- [fill = ffff]
@@ -219,26 +222,27 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.obj (.reset)
 
-.text      0    00010000    000001b4     
-                  00010000    0000009a     dsLib.obj (.text:DS3231GetCurrentTime)
-                  0001009a    0000006e     rts430x_lc_rd_eabi.lib : autoinit.obj (.text:_auto_init_hold_wdt)
-                  00010108    00000056     main_DS3231.obj (.text:main)
-                  0001015e    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
-                  00010182    00000016                            : mult16_f5hw.obj (.text)
-                  00010198    00000014     dsLib.obj (.text:bcd2bin)
-                  000101ac    00000004     rts430x_lc_rd_eabi.lib : pre_init.obj (.text:_system_pre_init)
-                  000101b0    00000004                            : exit.obj (.text:abort)
+.text      0    00010000    000001ec     
+                  00010000    000000be     dsLib.obj (.text:DS3231GetCurrentTime)
+                  000100be    0000006e     rts430x_lc_rd_eabi.lib : autoinit.obj (.text:_auto_init_hold_wdt)
+                  0001012c    00000056     main_DS3231.obj (.text:main)
+                  00010182    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
+                  000101a6    00000016                            : mult16_f5hw.obj (.text)
+                  000101bc    00000014     dsLib.obj (.text:bcd2bin)
+                  000101d0    00000014     rts430x_lc_rd_eabi.lib : memcpy.obj (.text:memcpy)
+                  000101e4    00000004                            : pre_init.obj (.text:_system_pre_init)
+                  000101e8    00000004                            : exit.obj (.text:abort)
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 0000442a records: 1, size/record: 8, table size: 8
-	.bss: load addr=00004420, load size=00000006 bytes, run addr=00001c00, run size=00000008 bytes, compression=zero_init
+__TI_cinit_table @ 00004432 records: 1, size/record: 8, table size: 8
+	.bss: load addr=00004428, load size=00000006 bytes, run addr=00001c00, run size=00000008 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00004426 records: 1, size/record: 4, table size: 4
+__TI_handler_table @ 0000442e records: 1, size/record: 4, table size: 4
 	index: 0, handler: __TI_zero_init
 
 
@@ -503,7 +507,7 @@ address    name
 000009ce   AESAXIN_L
 000004be   BCD2BIN
 000004bc   BIN2BCD
-000101b0   C$$EXIT
+000101e8   C$$EXIT
 0000043e   CAPTIO0CTL
 0000043f   CAPTIO0CTL_H
 0000043e   CAPTIO0CTL_L
@@ -1047,10 +1051,10 @@ address    name
 0000015c   WDTCTL_L
 00002400   __STACK_END
 000000a0   __STACK_SIZE
-0000442a   __TI_CINIT_Base
-00004432   __TI_CINIT_Limit
-00004426   __TI_Handler_Table_Base
-0000442a   __TI_Handler_Table_Limit
+00004432   __TI_CINIT_Base
+0000443a   __TI_CINIT_Limit
+0000442e   __TI_Handler_Table_Base
+00004432   __TI_Handler_Table_Limit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 0000441a   __TI_ISR_TRAP
@@ -1081,24 +1085,25 @@ UNDEFED    __TI_INITARRAY_Limit
 0000fff8   __TI_int52
 0000fffa   __TI_int53
 0000fffc   __TI_int54
-0001015e   __TI_zero_init
+00010182   __TI_zero_init
 ffffffff   __binit__
 ffffffff   __c_args__
-00010182   __mspabi_mpyi_f5hw
-0001009a   _auto_init_hold_wdt
+000101a6   __mspabi_mpyi_f5hw
+000100be   _auto_init_hold_wdt
 00004400   _c_int00
 00004400   _c_int00_noexit
 0000fffe   _reset_vector
 00002360   _stack
-000101ac   _system_pre_init
-000101b0   abort
-00010198   bcd2bin
+000101e4   _system_pre_init
+000101e8   abort
+000101bc   bcd2bin
 ffffffff   binit
 00004400   fram_ipe_end
 00004400   fram_ipe_start
 00004400   fram_rx_start
 00001c00   g_getTimeArr
-00010108   main
+0001012c   main
+000101d0   memcpy
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1914,10 +1919,10 @@ address    name
 00004400   fram_ipe_start
 00004400   fram_rx_start
 0000441a   __TI_ISR_TRAP
-00004426   __TI_Handler_Table_Base
-0000442a   __TI_CINIT_Base
-0000442a   __TI_Handler_Table_Limit
-00004432   __TI_CINIT_Limit
+0000442e   __TI_Handler_Table_Base
+00004432   __TI_CINIT_Base
+00004432   __TI_Handler_Table_Limit
+0000443a   __TI_CINIT_Limit
 0000ffcc   __TI_int30
 0000ffce   __TI_int31
 0000ffd0   __TI_int32
@@ -1945,18 +1950,19 @@ address    name
 0000fffc   __TI_int54
 0000fffe   _reset_vector
 00010000   DS3231GetCurrentTime
-0001009a   _auto_init_hold_wdt
-00010108   main
-0001015e   __TI_zero_init
-00010182   __mspabi_mpyi_f5hw
-00010198   bcd2bin
-000101ac   _system_pre_init
-000101b0   C$$EXIT
-000101b0   abort
+000100be   _auto_init_hold_wdt
+0001012c   main
+00010182   __TI_zero_init
+000101a6   __mspabi_mpyi_f5hw
+000101bc   bcd2bin
+000101d0   memcpy
+000101e4   _system_pre_init
+000101e8   C$$EXIT
+000101e8   abort
 ffffffff   __binit__
 ffffffff   __c_args__
 ffffffff   binit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 
-[853 symbols]
+[854 symbols]
