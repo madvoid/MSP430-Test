@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v4.3.4                      
 ******************************************************************************
->> Linked Mon Aug 25 15:46:09 2014
+>> Linked Sun Jan 18 19:07:30 2015
 
 OUTPUT FILE NAME:   <TimerB_OneShot.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00004400
@@ -79,7 +79,7 @@ MEMORY CONFIGURATION
   INT53                 0000fffa   00000002  00000002  00000000  RWIX
   INT54                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FRAM2                 00010000   00004000  000000fc  00003f04  RWIX
+  FRAM2                 00010000   00004000  000000ee  00003f12  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -213,12 +213,12 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.obj (.reset)
 
-.text      0    00010000    000000fc     
-                  00010000    00000080     main_TimerB_OneShot.obj (.text:main)
-                  00010080    0000006e     rts430x_lc_rd_eabi.lib : autoinit.obj (.text:_auto_init_hold_wdt)
-                  000100ee    00000006                            : isr_trap.obj (.text:__TI_ISR_TRAP)
-                  000100f4    00000004                            : pre_init.obj (.text:_system_pre_init)
-                  000100f8    00000004                            : exit.obj (.text:abort)
+.text      0    00010000    000000ee     
+                  00010000    00000072     main_TimerB_OneShot.obj (.text:main)
+                  00010072    0000006e     rts430x_lc_rd_eabi.lib : autoinit.obj (.text:_auto_init_hold_wdt)
+                  000100e0    00000006                            : isr_trap.obj (.text:__TI_ISR_TRAP)
+                  000100e6    00000004                            : pre_init.obj (.text:_system_pre_init)
+                  000100ea    00000004                            : exit.obj (.text:abort)
 
 
 GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
@@ -482,7 +482,7 @@ address    name
 000009ce   AESAXIN_L
 000004be   BCD2BIN
 000004bc   BIN2BCD
-000100f8   C$$EXIT
+000100ea   C$$EXIT
 0000043e   CAPTIO0CTL
 0000043f   CAPTIO0CTL_H
 0000043e   CAPTIO0CTL_L
@@ -544,24 +544,30 @@ address    name
 00000511   DMA0CTL_H
 00000510   DMA0CTL_L
 00000516   DMA0DA
+00000518   DMA0DAH
 00000516   DMA0DAL
 00000512   DMA0SA
+00000514   DMA0SAH
 00000512   DMA0SAL
 0000051a   DMA0SZ
 00000520   DMA1CTL
 00000521   DMA1CTL_H
 00000520   DMA1CTL_L
 00000526   DMA1DA
+00000528   DMA1DAH
 00000526   DMA1DAL
 00000522   DMA1SA
+00000524   DMA1SAH
 00000522   DMA1SAL
 0000052a   DMA1SZ
 00000530   DMA2CTL
 00000531   DMA2CTL_H
 00000530   DMA2CTL_L
 00000536   DMA2DA
+00000538   DMA2DAH
 00000536   DMA2DAL
 00000532   DMA2SA
+00000534   DMA2SAH
 00000532   DMA2SAL
 0000053a   DMA2SZ
 00000500   DMACTL0
@@ -824,12 +830,6 @@ address    name
 000004ce   SUMEXT
 000004cf   SUMEXT_H
 000004ce   SUMEXT_L
-00000198   SYSBERRIV
-00000199   SYSBERRIV_H
-00000198   SYSBERRIV_L
-00000182   SYSBSLC
-00000183   SYSBSLC_H
-00000182   SYSBSLC_L
 00000180   SYSCTL
 00000181   SYSCTL_H
 00000180   SYSCTL_L
@@ -1032,7 +1032,7 @@ UNDEFED    __TI_Handler_Table_Base
 UNDEFED    __TI_Handler_Table_Limit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
-000100ee   __TI_ISR_TRAP
+000100e0   __TI_ISR_TRAP
 00000001   __TI_args_main
 00000001   __TI_exit
 0000ffcc   __TI_int30
@@ -1062,13 +1062,13 @@ UNDEFED    __TI_INITARRAY_Limit
 0000fffc   __TI_int54
 ffffffff   __binit__
 ffffffff   __c_args__
-00010080   _auto_init_hold_wdt
+00010072   _auto_init_hold_wdt
 00004400   _c_int00
 00004400   _c_int00_noexit
 0000fffe   _reset_vector
 00002360   _stack
-000100f4   _system_pre_init
-000100f8   abort
+000100e6   _system_pre_init
+000100ea   abort
 ffffffff   binit
 00004400   fram_ipe_end
 00004400   fram_ipe_start
@@ -1149,9 +1149,6 @@ address    name
 00000180   SYSCTL
 00000180   SYSCTL_L
 00000181   SYSCTL_H
-00000182   SYSBSLC
-00000182   SYSBSLC_L
-00000183   SYSBSLC_H
 00000186   SYSJMBC
 00000186   SYSJMBC_L
 00000187   SYSJMBC_H
@@ -1167,9 +1164,6 @@ address    name
 0000018e   SYSJMBO1
 0000018e   SYSJMBO1_L
 0000018f   SYSJMBO1_H
-00000198   SYSBERRIV
-00000198   SYSBERRIV_L
-00000199   SYSBERRIV_H
 0000019a   SYSUNIV
 0000019a   SYSUNIV_L
 0000019b   SYSUNIV_H
@@ -1455,24 +1449,30 @@ address    name
 00000511   DMA0CTL_H
 00000512   DMA0SA
 00000512   DMA0SAL
+00000514   DMA0SAH
 00000516   DMA0DA
 00000516   DMA0DAL
+00000518   DMA0DAH
 0000051a   DMA0SZ
 00000520   DMA1CTL
 00000520   DMA1CTL_L
 00000521   DMA1CTL_H
 00000522   DMA1SA
 00000522   DMA1SAL
+00000524   DMA1SAH
 00000526   DMA1DA
 00000526   DMA1DAL
+00000528   DMA1DAH
 0000052a   DMA1SZ
 00000530   DMA2CTL
 00000530   DMA2CTL_L
 00000531   DMA2CTL_H
 00000532   DMA2SA
 00000532   DMA2SAL
+00000534   DMA2SAH
 00000536   DMA2DA
 00000536   DMA2DAL
+00000538   DMA2DAH
 0000053a   DMA2SZ
 000005a0   MPUCTL0
 000005a0   MPUCTL0_L
@@ -1915,11 +1915,11 @@ address    name
 0000fffc   __TI_int54
 0000fffe   _reset_vector
 00010000   main
-00010080   _auto_init_hold_wdt
-000100ee   __TI_ISR_TRAP
-000100f4   _system_pre_init
-000100f8   C$$EXIT
-000100f8   abort
+00010072   _auto_init_hold_wdt
+000100e0   __TI_ISR_TRAP
+000100e6   _system_pre_init
+000100ea   C$$EXIT
+000100ea   abort
 ffffffff   __binit__
 ffffffff   __c_args__
 ffffffff   binit

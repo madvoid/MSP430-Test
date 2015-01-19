@@ -21,22 +21,22 @@ int main(void)
   CSCTL4 &= ~LFXTOFF;						// Turn on LFXT
 
   // Check for clock faults
-  do
-  {
-    CSCTL5 &= ~LFXTOFFG;                    // Clear XT1 fault flag
-    SFRIFG1 &= ~OFIFG;						// Clear Oscillator fault flag
-  }while (SFRIFG1&OFIFG);                   // Test oscillator fault flag
+//  do
+//  {
+//    CSCTL5 &= ~LFXTOFFG;                    // Clear XT1 fault flag
+//    SFRIFG1 &= ~OFIFG;						// Clear Oscillator fault flag
+//  }while (SFRIFG1&OFIFG);                   // Test oscillator fault flag
 
   // Lock CS registers - Why isn't PUC created?
   CSCTL0_H = 0;
 
-  __delay_cycles(5000000);
+  __delay_cycles(2000000);
   P1OUT ^= BIT0;
 
   // Setup timer
   TB0CCTL0 = CCIE;                          // TBCCR0 interrupt enabled
-  TB0CCR0 = 32768;
-  TB0CTL = TBSSEL__ACLK | MC__UP;           // ACLK, up mode
+  TB0CCR0 = 8192;		// When input divider=8 and clock=32768kHz, this is 32768kHz/8*2s = 8192
+  TB0CTL = TBSSEL__ACLK | MC__UP | 0xC0;           // ACLK, up mode, input divider = 8
 
   __bis_SR_register(LPM3_bits | GIE);       // Enter LPM3 w/ interrupt
 
