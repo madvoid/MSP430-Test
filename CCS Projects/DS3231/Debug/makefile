@@ -9,6 +9,7 @@ CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/msp430_4.3.5
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
 "./dsLib.obj" \
+"./helper.obj" \
 "./main_DS3231.obj" \
 "../lnk_msp430fr5969.cmd" \
 -l"libc.a" \
@@ -142,8 +143,8 @@ DS3231.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "dsLib.pp" "main_DS3231.pp" 
-	-$(RM) "dsLib.obj" "main_DS3231.obj" 
+	-$(RM) "dsLib.pp" "helper.pp" "main_DS3231.pp" 
+	-$(RM) "dsLib.obj" "helper.obj" "main_DS3231.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

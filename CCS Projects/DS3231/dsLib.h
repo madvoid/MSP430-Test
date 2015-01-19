@@ -65,6 +65,9 @@ uint8_t g_getTimeArr[7];	//{seconds, minutes, hours, day, date, month, year}
 extern uint8_t bcd2bin (uint8_t val);
 extern uint8_t bin2bcd (uint8_t val);
 extern void DS3231GetCurrentTime(void);
+extern void DS3231SetAlarm1Plus10Sec(void);
+extern void DS3231TurnAlarm1On(void);
+extern void DS3231TurnAlarm1Off(void);
 
 
 
