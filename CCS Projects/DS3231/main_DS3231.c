@@ -50,6 +50,8 @@ int main(void) {
 		  P1OUT |= BIT0;							// LED On
 		P1SEL1 |= BIT6 | BIT7;                    // I2C pins
 		PJSEL0 |= BIT4 | BIT5;					  // Set J.4 & J.5 to accept crystal input for ACLK
+		  P4DIR = 0xFF;							  // P4 output
+		  P4OUT = BIT6;							  // P4.6 LED on
 
 		// Disable the GPIO power-on default high-impedance mode to activate
 		// previously configured port settings
@@ -71,10 +73,11 @@ int main(void) {
 //		i2cSetReset();		// Disable i2c module (for testing)
 
 		DS3231GetCurrentTime();
-		__no_operation();
 		DS3231SetAlarm1Plus10Sec();
 		DS3231TurnAlarm1On();
-
+		P4OUT &= ~BIT6;
+//		__bis_SR_register(LPM4_bits | GIE);     // Enter LPM4 w/interrupt
+//		P1OUT ^= BIT0;							// LED Toggle
 
 		while(1){
 			__bis_SR_register(LPM4_bits | GIE);     // Enter LPM4 w/interrupt
