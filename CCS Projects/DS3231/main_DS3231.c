@@ -70,18 +70,18 @@ int main(void) {
 		// Enable interrupts
 		__bis_SR_register(GIE);
 
-//		i2cSetReset();		// Disable i2c module (for testing)
-
 		DS3231GetCurrentTime();
 //		__no_operation();
 		DS3231SetAlarm1Round10Sec();
 		DS3231TurnAlarm1On();
+		i2cSetReset();
 		__bis_SR_register(LPM4_bits | GIE);     // Enter LPM4 w/interrupt
 		P4OUT &= ~BIT6;
 		DS3231GetCurrentTime();
 		DS3231SetAlarm1Plus10Sec();
 
 		while(1){
+			i2cSetReset();
 			__bis_SR_register(LPM4_bits | GIE);     // Enter LPM4 w/interrupt
 			P1OUT ^= BIT0;							// LED Toggle
 			DS3231GetCurrentTime();
