@@ -98,6 +98,30 @@ void DS3231GetCurrentTime(void){
 }
 
 
+void DS3231ClearAlarm1Bits(void){
+	// Configure USCI_B0 for I2C mode - Sending
+	UCB0CTLW0 |= UCSWRST;                     // Software reset enabled
+	UCB0CTLW0 |= UCMODE_3 | UCMST | UCSYNC | UCTR | UCSSEL__SMCLK;   // I2C mode, Master mode, sync, Sending, SMCLK
+	UCB0BRW = 0x0004;                         // baudrate = SMCLK / 4
+	UCB0CTLW1 |= UCASTP_2;					  // Auto stop
+	UCB0TBCNT = 5;			  				  // Auto stop count - 4 alarm registers + address reg
+	UCB0I2CSA = DS3231_I2C_ADDRESS;           // Slave address
+	UCB0CTL1 &= ~UCSWRST;					  // Clear reset
+	UCB0IE &= ~UCRXIE;						  // Clear rx interrupt
+	UCB0IE &= ~UCTXIE;						  // Clear tx interrupt
+
+	// Clear interrupt bit
+	UCB0CTLW0 |= UCTXSTT;				// Send start
+	while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt
+	UCB0TXBUF = DS3231_REG_STATUS_CTL;	// Send register address
+	while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt
+	UCB0TXBUF = 0x00;					// 0b00000000 - No OSF, No 32KHz, No BSY, A2F, A1F
+	while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt
+	UCB0CTLW0 |= UCTXSTP;				// Send stop
+	while(UCB0CTLW0 & UCTXSTP);			// Wait for stop
+}
+
+
 void DS3231SetAlarm1Plus10Sec(void){
 
 	// Get current time's seconds, add 10 seconds
@@ -135,26 +159,7 @@ void DS3231SetAlarm1Plus10Sec(void){
 	UCB0CTLW0 |= UCTXSTP;					// Send stop
 	while(UCB0CTLW0 & UCTXSTP);	// Wait for stop
 
-	// Configure USCI_B0 for I2C mode - Sending
-	UCB0CTLW0 |= UCSWRST;                     // Software reset enabled
-	UCB0CTLW0 |= UCMODE_3 | UCMST | UCSYNC | UCTR | UCSSEL__SMCLK;   // I2C mode, Master mode, sync, Sending, SMCLK
-	UCB0BRW = 0x0004;                         // baudrate = SMCLK / 4
-	UCB0CTLW1 |= UCASTP_2;					  // Auto stop
-	UCB0TBCNT = 5;			  				  // Auto stop count - 4 alarm registers + address reg
-	UCB0I2CSA = DS3231_I2C_ADDRESS;           // Slave address
-	UCB0CTL1 &= ~UCSWRST;					  // Clear reset
-	UCB0IE &= ~UCRXIE;						  // Clear rx interrupt
-	UCB0IE &= ~UCTXIE;						  // Clear tx interrupt
-
-	// Clear interrupt bit
-	UCB0CTLW0 |= UCTXSTT;				// Send start
-	while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt
-	UCB0TXBUF = DS3231_REG_STATUS_CTL;	// Send register address
-	while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt
-	UCB0TXBUF = 0x00;					// 0b00000000 - No OSF, No 32KHz, No BSY, A2F, A1F
-	while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt
-	UCB0CTLW0 |= UCTXSTP;				// Send stop
-	while(UCB0CTLW0 & UCTXSTP);			// Wait for stop
+	DS3231ClearAlarm1Bits();
 
 }
 
@@ -173,47 +178,28 @@ void DS3231SetAlarm1Round10Sec(void){
 	UCB0CTLW0 |= UCMODE_3 | UCMST | UCSYNC | UCTR | UCSSEL__SMCLK;   // I2C mode, Master mode, sync, Sending, SMCLK
 	UCB0BRW = 0x0004;                         // baudrate = SMCLK / 4
 	UCB0CTLW1 |= UCASTP_2;					  // Auto stop
-	UCB0TBCNT = 0x6;			  				  // Auto stop count - 6 greater than necessary, will manual stop
+	UCB0TBCNT = 0x6;			  			  // Auto stop count - 6 greater than necessary, will manual stop
 	UCB0I2CSA = DS3231_I2C_ADDRESS;           // Slave address
 	UCB0CTL1 &= ~UCSWRST;					  // Clear reset
 	UCB0IE &= ~UCRXIE;						  // Clear rx interrupt
 	UCB0IE &= ~UCTXIE;						  // Clear tx interrupt
 
-	UCB0CTLW0 |= UCTXSTT;				// Send start
-	while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt
-	UCB0TXBUF = DS3231_REG_A1SECONDS;	// Send register address
-	while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt
+	UCB0CTLW0 |= UCTXSTT;					// Send start
+	while(!(UCB0IFG & UCTXIFG0));			// Wait for tx interrupt
+	UCB0TXBUF = DS3231_REG_A1SECONDS;		// Send register address
+	while(!(UCB0IFG & UCTXIFG0));			// Wait for tx interrupt
 	UCB0TXBUF = seconds & 0x7F;				// Mask and send seconds
-	while(!(UCB0IFG & UCTXIFG0));	// Wait for tx interrupt
-	UCB0TXBUF = 0x80;				// Send A1M2 Mask
-	while(!(UCB0IFG & UCTXIFG0));	// Wait for tx interrupt
-	UCB0TXBUF = 0x80;				// Send A1M3 Mask
-	while(!(UCB0IFG & UCTXIFG0));	// Wait for tx interrupt
-	UCB0TXBUF = 0x80;				// Send A1M4 Mask
-	while(!(UCB0IFG & UCTXIFG0));	// Wait for tx interrupt
+	while(!(UCB0IFG & UCTXIFG0));			// Wait for tx interrupt
+	UCB0TXBUF = 0x80;						// Send A1M2 Mask
+	while(!(UCB0IFG & UCTXIFG0));			// Wait for tx interrupt
+	UCB0TXBUF = 0x80;						// Send A1M3 Mask
+	while(!(UCB0IFG & UCTXIFG0));			// Wait for tx interrupt
+	UCB0TXBUF = 0x80;						// Send A1M4 Mask
+	while(!(UCB0IFG & UCTXIFG0));			// Wait for tx interrupt
 	UCB0CTLW0 |= UCTXSTP;					// Send stop
-	while(UCB0CTLW0 & UCTXSTP);	// Wait for stop
+	while(UCB0CTLW0 & UCTXSTP);				// Wait for stop
 
-	// Configure USCI_B0 for I2C mode - Sending
-	UCB0CTLW0 |= UCSWRST;                     // Software reset enabled
-	UCB0CTLW0 |= UCMODE_3 | UCMST | UCSYNC | UCTR | UCSSEL__SMCLK;   // I2C mode, Master mode, sync, Sending, SMCLK
-	UCB0BRW = 0x0004;                         // baudrate = SMCLK / 4
-	UCB0CTLW1 |= UCASTP_2;					  // Auto stop
-	UCB0TBCNT = 5;			  				  // Auto stop count - 4 alarm registers + address reg
-	UCB0I2CSA = DS3231_I2C_ADDRESS;           // Slave address
-	UCB0CTL1 &= ~UCSWRST;					  // Clear reset
-	UCB0IE &= ~UCRXIE;						  // Clear rx interrupt
-	UCB0IE &= ~UCTXIE;						  // Clear tx interrupt
-
-	// Clear interrupt bit
-	UCB0CTLW0 |= UCTXSTT;				// Send start
-	while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt
-	UCB0TXBUF = DS3231_REG_STATUS_CTL;	// Send register address
-	while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt
-	UCB0TXBUF = 0x00;					// 0b00000000 - No OSF, No 32KHz, No BSY, A2F, A1F
-	while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt
-	UCB0CTLW0 |= UCTXSTP;				// Send stop
-	while(UCB0CTLW0 & UCTXSTP);			// Wait for stop
+	DS3231ClearAlarm1Bits();
 
 }
 
@@ -230,7 +216,7 @@ void DS3231TurnAlarm1On(void){
 	UCB0IE &= ~UCRXIE;						  // Clear rx interrupt
 	UCB0IE &= ~UCTXIE;						  // Clear tx interrupt
 
-	// Clear interrupt bit
+	// Set interrupt bit
 	UCB0CTLW0 |= UCTXSTT;				// Send start
 	while(!(UCB0IFG & UCTXIFG0));		// Wait for tx interrupt
 	UCB0TXBUF = DS3231_REG_CONTROL;		// Send register address

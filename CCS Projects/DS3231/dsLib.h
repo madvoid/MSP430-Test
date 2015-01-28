@@ -70,6 +70,7 @@ extern void DS3231SetAlarm1Plus10Sec(void);
 extern void DS3231SetAlarm1Round10Sec(void);
 extern void DS3231TurnAlarm1On(void);
 extern void DS3231TurnAlarm1Off(void);
+extern void DS3231ClearAlarm1Bits(void);
 
 
 

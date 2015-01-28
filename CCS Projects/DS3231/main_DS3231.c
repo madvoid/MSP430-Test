@@ -71,7 +71,7 @@ int main(void) {
 		__bis_SR_register(GIE);
 
 		DS3231GetCurrentTime();
-//		__no_operation();
+		DS3231ClearAlarm1Bits();
 		DS3231SetAlarm1Round10Sec();
 		DS3231TurnAlarm1On();
 		i2cSetReset();

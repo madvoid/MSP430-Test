@@ -90,11 +90,11 @@ int main(void)
 	CSCTL0_H = 0;
 
   // Configure GPIO
-  P1OUT = BIT1 | BIT3;                             // Pull-up resistor on P1.1, 1.3
-  P1REN = BIT1 | BIT3;                             // Select pull-up mode for P1.1, 1.3
+  P1OUT = BIT1 | BIT3;                             	// Pull-up resistor on P1.1, 1.3
+  P1REN = BIT1 | BIT3;                             	// Select pull-up mode for P1.1, 1.3
   P1DIR = 0xFF ^ (BIT1 | BIT3);                      // Set all but P1.1, 1.3 to output direction
   P1IES = BIT1 | BIT3;                             // P1.1 Hi/Lo edge
-  P1IFG = 0;                                // Clear all P1 interrupt flags
+  P1IFG = 0;                                	// Clear all P1 interrupt flags
   P1IE = BIT1 | BIT3;                              // P1.1, 1.3 interrupt enabled
 
   P2OUT = 0;
@@ -141,6 +141,6 @@ void __attribute__ ((interrupt(PORT1_VECTOR))) Port_1 (void)
 {
 //  P1IES ^= (BIT1 | BIT3);                            // Toggle interrupt edge
   flag = P1IV;
-  P1IFG &= ~(BIT1 | BIT3);                           // Clear P1.1 IFG
+  P1IFG &= ~(BIT1 | BIT3);                           // Clear P1.1, 1.3 IFG
   __bic_SR_register_on_exit(LPM4_bits);     // Exit LPM4
 }

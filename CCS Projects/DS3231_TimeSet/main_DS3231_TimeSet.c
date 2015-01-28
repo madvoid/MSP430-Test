@@ -53,7 +53,7 @@
 
 // Global --------------------------------------------------------------------------------------------
 // Do NOT use leading zeros!
-uint8_t g_setTimeArr[] = {0,34,21,5,15,1,15};	//{seconds, minutes, hours, day, date, month, year}
+uint8_t g_setTimeArr[] = {0,59,23,7,24,1,15};	//{seconds, minutes, hours, day, date, month, year}
 const uint8_t g_timeMask[] = {0x7F,0x7F,0x3F,0x7,0x3F,0x9F,0xFF}; //{seconds, minutes, hours, day, date, month, year}
 uint8_t g_rtcTimeLength = 7;
 

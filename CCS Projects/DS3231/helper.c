@@ -44,5 +44,7 @@ void FloatToPrint(float floatValue, int32_t splitValue[2]){
 }
 
 void i2cSetReset(void){
+	// TODO: Fix so delay isn't needed
+	__delay_cycles(200);	// 200 us wait for whatever transfer to finish
 	UCB0CTLW0 |= UCSWRST;
 }

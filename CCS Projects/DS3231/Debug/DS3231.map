@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v4.3.5                      
 ******************************************************************************
->> Linked Sat Jan 24 23:22:58 2015
+>> Linked Tue Jan 27 22:53:46 2015
 
 OUTPUT FILE NAME:   <DS3231.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00004400
@@ -79,7 +79,7 @@ MEMORY CONFIGURATION
   INT53                 0000fffa   00000002  00000002  00000000  RWIX
   INT54                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FRAM2                 00010000   00004000  000005a4  00003a5c  RWIX
+  FRAM2                 00010000   00004000  0000056c  00003a94  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -227,28 +227,29 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.obj (.reset)
 
-.text      0    00010000    000005a4     
-                  00010000    000000ec     dsLib.obj (.text:DS3231SetAlarm1Plus10Sec)
-                  000100ec    000000e0     dsLib.obj (.text:DS3231SetAlarm1Round10Sec)
-                  000101cc    000000b8     main_DS3231.obj (.text:main)
-                  00010284    00000096     dsLib.obj (.text:DS3231GetCurrentTime)
-                  0001031a    0000006e     rts430x_lc_rd_eabi.lib : autoinit.obj (.text:_auto_init_hold_wdt)
-                  00010388    00000062                            : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
-                  000103ea    0000004c     dsLib.obj (.text:DS3231TurnAlarm1Off)
-                  00010436    0000004c     dsLib.obj (.text:DS3231TurnAlarm1On)
-                  00010482    0000003c     dsLib.obj (.text:roundUpToTen)
-                  000104be    0000002c     rts430x_lc_rd_eabi.lib : div16s.obj (.text)
-                  000104ea    00000024                            : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
-                  0001050e    0000001c     dsLib.obj (.text:bin2bcd)
-                  0001052a    00000016     rts430x_lc_rd_eabi.lib : div16u.obj (.text)
-                  00010540    00000016                            : mult16_f5hw.obj (.text)
-                  00010556    00000014     dsLib.obj (.text:bcd2bin)
-                  0001056a    00000014     rts430x_lc_rd_eabi.lib : memcpy.obj (.text:memcpy)
-                  0001057e    00000012                            : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
-                  00010590    00000006                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
-                  00010596    00000006     helper.obj (.text:i2cSetReset)
-                  0001059c    00000004     rts430x_lc_rd_eabi.lib : pre_init.obj (.text:_system_pre_init)
-                  000105a0    00000004                            : exit.obj (.text:abort)
+.text      0    00010000    0000056c     
+                  00010000    000000bc     main_DS3231.obj (.text:main)
+                  000100bc    0000009c     dsLib.obj (.text:DS3231SetAlarm1Plus10Sec)
+                  00010158    00000096     dsLib.obj (.text:DS3231GetCurrentTime)
+                  000101ee    00000090     dsLib.obj (.text:DS3231SetAlarm1Round10Sec)
+                  0001027e    0000006e     rts430x_lc_rd_eabi.lib : autoinit.obj (.text:_auto_init_hold_wdt)
+                  000102ec    00000062                            : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
+                  0001034e    00000056     dsLib.obj (.text:DS3231ClearAlarm1Bits)
+                  000103a4    0000004c     dsLib.obj (.text:DS3231TurnAlarm1Off)
+                  000103f0    0000004c     dsLib.obj (.text:DS3231TurnAlarm1On)
+                  0001043c    0000003c     dsLib.obj (.text:roundUpToTen)
+                  00010478    0000002c     rts430x_lc_rd_eabi.lib : div16s.obj (.text)
+                  000104a4    00000024                            : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
+                  000104c8    0000001c     dsLib.obj (.text:bin2bcd)
+                  000104e4    00000016     rts430x_lc_rd_eabi.lib : div16u.obj (.text)
+                  000104fa    00000016                            : mult16_f5hw.obj (.text)
+                  00010510    00000014     dsLib.obj (.text:bcd2bin)
+                  00010524    00000014     helper.obj (.text:i2cSetReset)
+                  00010538    00000014     rts430x_lc_rd_eabi.lib : memcpy.obj (.text:memcpy)
+                  0001054c    00000012                            : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
+                  0001055e    00000006                            : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
+                  00010564    00000004                            : pre_init.obj (.text:_system_pre_init)
+                  00010568    00000004                            : exit.obj (.text:abort)
 
 
 LINKER GENERATED COPY TABLES
@@ -527,7 +528,7 @@ address    name
 000009ce   AESAXIN_L
 000004be   BCD2BIN
 000004bc   BIN2BCD
-000105a0   C$$EXIT
+00010568   C$$EXIT
 0000043e   CAPTIO0CTL
 0000043f   CAPTIO0CTL_H
 0000043e   CAPTIO0CTL_L
@@ -633,11 +634,12 @@ address    name
 0000050e   DMAIV
 0000050f   DMAIV_H
 0000050e   DMAIV_L
-00010284   DS3231GetCurrentTime
-00010000   DS3231SetAlarm1Plus10Sec
-000100ec   DS3231SetAlarm1Round10Sec
-000103ea   DS3231TurnAlarm1Off
-00010436   DS3231TurnAlarm1On
+0001034e   DS3231ClearAlarm1Bits
+00010158   DS3231GetCurrentTime
+000100bc   DS3231SetAlarm1Plus10Sec
+000101ee   DS3231SetAlarm1Round10Sec
+000103a4   DS3231TurnAlarm1Off
+000103f0   DS3231TurnAlarm1On
 00000140   FRCTL0
 00000141   FRCTL0_H
 00000140   FRCTL0_L
@@ -1084,8 +1086,8 @@ UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 00004426   __TI_ISR_TRAP
 00000001   __TI_args_main
-0001057e   __TI_decompress_none
-00010590   __TI_decompress_rle24
+0001054c   __TI_decompress_none
+0001055e   __TI_decompress_rle24
 00000001   __TI_exit
 0000ffcc   __TI_int30
 0000ffce   __TI_int31
@@ -1112,33 +1114,33 @@ UNDEFED    __TI_INITARRAY_Limit
 0000fff8   __TI_int52
 0000fffa   __TI_int53
 0000fffc   __TI_int54
-000104ea   __TI_zero_init
+000104a4   __TI_zero_init
 ffffffff   __binit__
 ffffffff   __c_args__
-000104be   __mspabi_divi
-0001052a   __mspabi_divu
-00010540   __mspabi_mpyi_f5hw
-000104be   __mspabi_remi
-0001052a   __mspabi_remu
-0001031a   _auto_init_hold_wdt
+00010478   __mspabi_divi
+000104e4   __mspabi_divu
+000104fa   __mspabi_mpyi_f5hw
+00010478   __mspabi_remi
+000104e4   __mspabi_remu
+0001027e   _auto_init_hold_wdt
 00004400   _c_int00
 00004400   _c_int00_noexit
 0000fffe   _reset_vector
 00002360   _stack
-0001059c   _system_pre_init
-000105a0   abort
-00010556   bcd2bin
-0001050e   bin2bcd
+00010564   _system_pre_init
+00010568   abort
+00010510   bcd2bin
+000104c8   bin2bcd
 ffffffff   binit
 00001c08   count
 00004400   fram_ipe_end
 00004400   fram_ipe_start
 00004400   fram_rx_start
 00001c00   g_getTimeArr
-00010596   i2cSetReset
-000101cc   main
-0001056a   memcpy
-00010482   roundUpToTen
+00010524   i2cSetReset
+00010000   main
+00010538   memcpy
+0001043c   roundUpToTen
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1986,33 +1988,34 @@ address    name
 0000fffa   __TI_int53
 0000fffc   __TI_int54
 0000fffe   _reset_vector
-00010000   DS3231SetAlarm1Plus10Sec
-000100ec   DS3231SetAlarm1Round10Sec
-000101cc   main
-00010284   DS3231GetCurrentTime
-0001031a   _auto_init_hold_wdt
-000103ea   DS3231TurnAlarm1Off
-00010436   DS3231TurnAlarm1On
-00010482   roundUpToTen
-000104be   __mspabi_divi
-000104be   __mspabi_remi
-000104ea   __TI_zero_init
-0001050e   bin2bcd
-0001052a   __mspabi_divu
-0001052a   __mspabi_remu
-00010540   __mspabi_mpyi_f5hw
-00010556   bcd2bin
-0001056a   memcpy
-0001057e   __TI_decompress_none
-00010590   __TI_decompress_rle24
-00010596   i2cSetReset
-0001059c   _system_pre_init
-000105a0   C$$EXIT
-000105a0   abort
+00010000   main
+000100bc   DS3231SetAlarm1Plus10Sec
+00010158   DS3231GetCurrentTime
+000101ee   DS3231SetAlarm1Round10Sec
+0001027e   _auto_init_hold_wdt
+0001034e   DS3231ClearAlarm1Bits
+000103a4   DS3231TurnAlarm1Off
+000103f0   DS3231TurnAlarm1On
+0001043c   roundUpToTen
+00010478   __mspabi_divi
+00010478   __mspabi_remi
+000104a4   __TI_zero_init
+000104c8   bin2bcd
+000104e4   __mspabi_divu
+000104e4   __mspabi_remu
+000104fa   __mspabi_mpyi_f5hw
+00010510   bcd2bin
+00010524   i2cSetReset
+00010538   memcpy
+0001054c   __TI_decompress_none
+0001055e   __TI_decompress_rle24
+00010564   _system_pre_init
+00010568   C$$EXIT
+00010568   abort
 ffffffff   __binit__
 ffffffff   __c_args__
 ffffffff   binit
 UNDEFED    __TI_INITARRAY_Base
 UNDEFED    __TI_INITARRAY_Limit
 
-[869 symbols]
+[870 symbols]
