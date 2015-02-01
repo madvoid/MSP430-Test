@@ -10,7 +10,7 @@ uint16_t fp;		// Used for sizeof
 
 uint8_t status = 17;	// Status variable that should change if successful
 
-float testFloat = 85327.87;	// Sample floating point number
+float testFloat = 87845.916;	// Sample floating point number
 int32_t printValue[2];	// Size 2 array that will hold the split float for printing
 
 
@@ -100,13 +100,16 @@ int main(void)
 	int i = 0;
 	// Open & write
 	if(f_open(&logfile, "newfile.txt", FA_WRITE | FA_OPEN_ALWAYS) == FR_OK) {	// Open file - If nonexistent, create
+//		P4OUT |= BIT6;					// Used for current testing
+//		__delay_cycles(5000000);
+//		P4OUT &= ~BIT6;
 		f_lseek(&logfile, logfile.fsize);					// Move forward by filesize; logfile.fsize+1 is not needed in this application
 		for(i = 0; i < 25; i++){
 			f_printf(&logfile, "%ld.%ld\n", printValue[0], printValue[1]);
 		}
-		P4OUT |= BIT6;
-		__delay_cycles(1000000);
-		P4OUT &= ~BIT6;
+//		P4OUT |= BIT6;					// Used for current testing
+//		__delay_cycles(5000000);
+//		P4OUT &= ~BIT6;
 		f_close(&logfile);							// Close the file
 		if (bw == 11) {
 			P1OUT |= BIT0;

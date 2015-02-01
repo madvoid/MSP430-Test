@@ -56,5 +56,6 @@ float g_ambientTemp;					// Ambient temperature
 extern void MLX90615GetObjTemp(void);
 extern void MLX90615GetAmbTemp(void);
 extern void MLX90615Sleep(void);
+extern void MLX90615Wake(void);
 
 #endif /* MLXLIB_H_ */
