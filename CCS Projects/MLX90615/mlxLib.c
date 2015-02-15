@@ -132,24 +132,18 @@ void MLX90615Wake(void){
 	// Drive SCL low
 	P1OUT &= ~(BIT7);				// P1.7 (SCL) to low
 
-	// Setup timer for 39ms measurement delay
-	TB0CCTL0 = CCIE;                          // TBCCR0 interrupt enabled
-	TB0CCR0 = 1700;							// (1700 ticks) * (1 second / 32768 ticks) = 51.8 ms > 39 ms required
-	TB0CTL = TBSSEL__ACLK | MC__UP;           // ACLK, up mode
-
-	__bis_SR_register(LPM3_bits);       // Enter LPM3 w/ interrupt
+	// Delay for 39ms to wake from sleep
+	__delay_cycles(39000);
 
 	// SCL high and switch back to I2C mode
 	P1OUT |= BIT7;
 	P1SEL1 |= BIT6 | BIT7;                    // I2C pins
 
 	// Delay for > 0.3 s for valid values to appear. Comment out, change if application allows
-//	__delay_cycles(305000);
+	__delay_cycles(305000);
 
-	// Setup timer for 39ms measurement delay
-	TB0CCTL0 = CCIE;                          // TBCCR0 interrupt enabled
-	TB0CCR0 = 10000;						  // (10000 ticks) * (1 second / 32768 ticks) = 0.305s > 0.3s required
-	TB0CTL = TBSSEL__ACLK | MC__UP;           // ACLK, up mode
-
-	__bis_SR_register(LPM3_bits);       // Enter LPM3 w/ interrupt
+	// For some reason, using timers and low power modes prevents the uC from sleeping later on
+	// For now delay_cycles() will be used, timers will be added if it can be figured out
+	// TODO: Convert delay_cycles() to timer values
+	// NOTE: May need to change timers in other libraries
 }
