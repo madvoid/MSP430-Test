@@ -1,7 +1,16 @@
 #include <msp430.h>
 #include <stdint.h>
-#include "FatFS/ff.h"
-#include "FatFS/diskio.h"
+#include "./FatFS/ff.h"
+#include "./FatFS/diskio.h"
+
+/*
+ *
+ * IMPORTANT UPDATING INFORMATION!
+ * When updating FatFS, two things need to be remembered:
+ * - The diskio.c file is unique to the MSP430FR5969. Don't use included ChaN included diskio.c file
+ * - _USE_STRFUNC in ffconf.h needs to be defined as 1 (~ line 36). Compilation errors will happen otherwise
+ *
+ */
 
 
 FATFS sdVolume;		// FatFs work area needed for each volume
@@ -10,8 +19,9 @@ uint16_t fp;		// Used for sizeof
 
 uint8_t status = 17;	// Status variable that should change if successful
 
-float testFloat = 87845.916;	// Sample floating point number
+float testFloat = 85432.123;	// Sample floating point number
 int32_t printValue[2];	// Size 2 array that will hold the split float for printing
+
 
 
 void FloatToPrint(float floatValue, int32_t splitValue[2]){
@@ -92,14 +102,39 @@ int main(void)
 			break;
 	}
 
+	if(status != 42){
+		// Error has occurred
+		P4OUT |= BIT6;
+		while(1);
+	}
+
+	  char filename[] = "LOG2_00.csv";
+	  FILINFO fno;
+	  FRESULT fr;
+	  uint8_t i;
+	  for(i = 0; i < 100; i++){
+		  filename[5] = i / 10 + '0';
+		  filename[6] = i % 10 + '0';
+		  fr = f_stat(filename, &fno);
+		  if(fr == FR_OK){
+			  continue;
+		  }else if(fr == FR_NO_FILE){
+			  break;
+		  }else{
+			  // Error occurred
+			  P4OUT |= BIT6;
+			  P1OUT |= BIT0;
+			  while(1);
+		  }
+	  }
+
 	// Initialize result variable
 	UINT bw = 0;
 
 	FloatToPrint(testFloat, printValue);
 
-	int i = 0;
 	// Open & write
-	if(f_open(&logfile, "newfile.txt", FA_WRITE | FA_OPEN_ALWAYS) == FR_OK) {	// Open file - If nonexistent, create
+	if(f_open(&logfile, filename, FA_WRITE | FA_OPEN_ALWAYS) == FR_OK) {	// Open file - If nonexistent, create
 //		P4OUT |= BIT6;					// Used for current testing
 //		__delay_cycles(5000000);
 //		P4OUT &= ~BIT6;
@@ -107,6 +142,7 @@ int main(void)
 		for(i = 0; i < 25; i++){
 			f_printf(&logfile, "%ld.%ld\n", printValue[0], printValue[1]);
 		}
+		// TODO:Implement f_sync();
 //		P4OUT |= BIT6;					// Used for current testing
 //		__delay_cycles(5000000);
 //		P4OUT &= ~BIT6;

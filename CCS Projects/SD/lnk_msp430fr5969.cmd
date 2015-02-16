@@ -44,7 +44,7 @@
 /* -heap   0x0100                                   HEAP AREA SIZE            */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
-/* Version: 1.153                                                             */
+/* Version: 1.155                                                             */
 /*----------------------------------------------------------------------------*/
 
 /****************************************************************************/
@@ -142,10 +142,18 @@ SECTIONS
     .init_array       : {}  > FRAM          /* C++ Constructor tables            */
     .mspabi.exidx     : {}  > FRAM          /* C++ Constructor tables            */
     .mspabi.extab     : {}  > FRAM          /* C++ Constructor tables            */
+#ifndef __LARGE_DATA_MODEL__
+    .const            : {} >> FRAM          /* Constant data                     */
+#else
     .const            : {} >> FRAM | FRAM2  /* Constant data                     */
+#endif
 
     .text:_isr        : {}  > FRAM          /* Code ISRs                         */
+#ifndef __LARGE_DATA_MODEL__
+    .text             : {} >> FRAM          /* Code                              */
+#else
     .text             : {} >> FRAM2 | FRAM  /* Code                              */
+#endif
 
     GROUP(IPENCAPSULATED_MEMORY)
     {
