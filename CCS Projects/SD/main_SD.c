@@ -1,5 +1,6 @@
 #include <msp430.h>
 #include <stdint.h>
+#include "dsLib.h"
 #include "./FatFS/ff.h"
 #include "./FatFS/diskio.h"
 
@@ -108,6 +109,8 @@ int main(void)
 		while(1);
 	}
 
+	DS3231GetCurrentTime();
+
 	  char filename[] = "LOG2_00.csv";
 	  FILINFO fno;
 	  FRESULT fr;
@@ -135,17 +138,16 @@ int main(void)
 
 	// Open & write
 	if(f_open(&logfile, filename, FA_WRITE | FA_OPEN_ALWAYS) == FR_OK) {	// Open file - If nonexistent, create
-//		P4OUT |= BIT6;					// Used for current testing
-//		__delay_cycles(5000000);
-//		P4OUT &= ~BIT6;
-		f_lseek(&logfile, logfile.fsize);					// Move forward by filesize; logfile.fsize+1 is not needed in this application
-		for(i = 0; i < 25; i++){
+		f_lseek(&logfile, logfile.fsize);			// Move forward by filesize; logfile.fsize+1 is not needed in this application
+		for(i = 0; i < 10; i++){
 			f_printf(&logfile, "%ld.%ld\n", printValue[0], printValue[1]);
 		}
-		// TODO:Implement f_sync();
-//		P4OUT |= BIT6;					// Used for current testing
-//		__delay_cycles(5000000);
-//		P4OUT &= ~BIT6;
+		f_sync(&logfile);
+		testFloat += 1205.57;
+		FloatToPrint(testFloat, printValue);
+		for(i = 0; i < 10; i++){
+			f_printf(&logfile, "%ld.%ld\n", printValue[0], printValue[1]);
+		}
 		f_close(&logfile);							// Close the file
 		if (bw == 11) {
 			P1OUT |= BIT0;

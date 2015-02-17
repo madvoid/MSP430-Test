@@ -7,6 +7,7 @@ main_SD.obj: c:/ti/ccsv6/ccs_base/msp430/include/in430.h
 main_SD.obj: c:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.1/include/intrinsics.h
 main_SD.obj: c:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.1/include/intrinsics_legacy_undefs.h
 main_SD.obj: c:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.1/include/stdint.h
+main_SD.obj: ../dsLib.h
 main_SD.obj: .././FatFS/ff.h
 main_SD.obj: .././FatFS/integer.h
 main_SD.obj: .././FatFS/ffconf.h
@@ -19,6 +20,7 @@ c:/ti/ccsv6/ccs_base/msp430/include/in430.h:
 c:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.1/include/intrinsics.h: 
 c:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.1/include/intrinsics_legacy_undefs.h: 
 c:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.1/include/stdint.h: 
+../dsLib.h: 
 .././FatFS/ff.h: 
 .././FatFS/integer.h: 
 .././FatFS/ffconf.h: 

@@ -8,6 +8,7 @@ CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/ti-cgt-msp430_4.4.1
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
+"./dsLib.obj" \
 "./main_SD.obj" \
 "./FatFS/diskio.obj" \
 "./FatFS/ff.obj" \
@@ -145,8 +146,8 @@ SD.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "main_SD.pp" "FatFS\diskio.pp" "FatFS\ff.pp" 
-	-$(RM) "main_SD.obj" "FatFS\diskio.obj" "FatFS\ff.obj" 
+	-$(RM) "dsLib.pp" "main_SD.pp" "FatFS\diskio.pp" "FatFS\ff.pp" 
+	-$(RM) "dsLib.obj" "main_SD.obj" "FatFS\diskio.obj" "FatFS\ff.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
