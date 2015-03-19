@@ -112,7 +112,10 @@ static BYTE rcvr_spi (void){
 
 	ui8RcvDat = UCA1RXBUF;				// Read RX buffer
 
+	__bis_SR_register(gie);				// Reload interrupt state
+
 	return (BYTE)ui8RcvDat;
+
 }
 
 

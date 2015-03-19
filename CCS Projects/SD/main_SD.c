@@ -109,7 +109,7 @@ int main(void)
 		while(1);
 	}
 
-	DS3231GetCurrentTime();
+//	DS3231GetCurrentTime();
 
 	  char filename[] = "LOG2_00.csv";
 	  FILINFO fno;
