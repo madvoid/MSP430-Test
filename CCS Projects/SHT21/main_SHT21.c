@@ -63,6 +63,8 @@ int main(void) {
 
 	  // Stop
 	  __no_operation();
+
+	  while(1);
 }
 
 
@@ -80,7 +82,7 @@ void __attribute__ ((interrupt(TIMER0_B0_VECTOR))) Timer0_B0_ISR (void)
 #error Compiler not supported!
 #endif
 {
-	TB0CTL &= ~MC__STOP;
+	TB0CTL &= ~MC_3;
 	__bic_SR_register_on_exit(LPM3_bits); 	// Exit LPM3
 }
 
